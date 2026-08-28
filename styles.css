@@ -1,0 +1,1331 @@
+/* ==========================================================================
+   1. VARIABLES GLOBALES
+   ========================================================================== */
+:root {
+  --bg-dark: #070d19;
+  --bg-light: #ffffff;
+  --primary: #0052ff;
+  --accent: #00f0ff;
+  --text-dark: #0f172a;
+  --text-light: #f8fafc;
+
+  --font-display: 'Sora', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  --container-max: 1180px;
+  --radius: 10px;
+  --transition: 0.2s ease-in-out;
+}
+
+/* ==========================================================================
+   2. RESET BÁSICO
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+/* Respeta preferencia de reducción de movimiento */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================================================
+   3. TIPOGRAFÍA FLUIDA (clamp: mínimo, preferido, máximo)
+   ========================================================================== */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  color: var(--text-light);
+  line-height: 1.15;
+}
+
+h1 {
+  font-size: clamp(1.9rem, 5vw + 1rem, 3.4rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+p {
+  font-size: clamp(1rem, 0.4vw + 0.9rem, 1.15rem);
+}
+
+/* ==========================================================================
+   4. LAYOUT BASE / UTILIDADES
+   ========================================================================== */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+/* ==========================================================================
+   5. HEADER / NAVBAR
+   ========================================================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: rgba(7, 13, 25, 0.85);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(248, 250, 252, 0.08);
+}
+
+.navbar {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.25rem;
+}
+
+.navbar__logo {
+  display: block;
+  height: 56px;
+  width: 56px;
+  border-radius: 50%;
+  overflow: hidden;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (min-width: 768px) {
+  .navbar__logo {
+    height: 72px;
+    width: 72px;
+  }
+}
+
+/* ==========================================================================
+   6. BOTONES
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform var(--transition), background-color var(--transition), border-color var(--transition);
+  white-space: nowrap;
+}
+
+.btn:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Botón primario: azul eléctrico, alta jerarquía visual */
+.btn--primary {
+  background-color: var(--primary);
+  color: var(--text-light);
+}
+
+.btn--primary:hover {
+  background-color: #0044d1;
+}
+
+/* Botón secundario: cyan outline, jerarquía media */
+.btn--outline {
+  background-color: transparent;
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn--outline:hover {
+  background-color: rgba(0, 240, 255, 0.08);
+}
+
+/* Botón del header: compacto, para WhatsApp */
+.btn--whatsapp {
+  background-color: rgba(0, 240, 255, 0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+  padding: 0.55rem 1.1rem;
+  font-size: 0.85rem;
+}
+
+.btn--whatsapp:hover {
+  background-color: rgba(0, 240, 255, 0.18);
+}
+
+/* ==========================================================================
+   7. HERO — visible sin scroll en mobile
+   ========================================================================== */
+.hero {
+  min-height: calc(100svh - 60px); /* resta la altura aprox. del header */
+  display: flex;
+  align-items: center;
+  background:
+    radial-gradient(60% 50% at 80% 0%, rgba(0, 82, 255, 0.25), transparent 70%),
+    radial-gradient(50% 40% at 10% 100%, rgba(0, 240, 255, 0.12), transparent 70%),
+    var(--bg-dark);
+  padding: 2rem 1.25rem;
+}
+
+.hero__content {
+  max-width: 720px;
+  margin-inline: auto;
+  text-align: left;
+}
+
+.hero__subtitle {
+  margin-top: 1.1rem;
+  color: rgba(248, 250, 252, 0.75);
+  max-width: 56ch;
+}
+
+.hero__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-top: 1.8rem;
+}
+
+/* A partir de tablet, botones en fila y hero centrado */
+@media (min-width: 640px) {
+  .hero__actions {
+    flex-direction: row;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero {
+    padding: 4rem 2rem;
+  }
+}
+
+/* ==========================================================================
+   8. SECCIÓN 2 — EL PROBLEMA (fondo claro, contraste con el hero)
+   ========================================================================== */
+.problem {
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  padding: 3.5rem 0 4rem;
+}
+
+.problem__title {
+  color: var(--text-dark);
+  max-width: 22ch;
+  font-size: clamp(1.6rem, 3.5vw + 1rem, 2.4rem);
+}
+
+/* Grid mobile-first: 1 columna, pasa a 3 desde tablet */
+.problem__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  margin-top: 2.25rem;
+}
+
+@media (min-width: 768px) {
+  .problem__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.problem-card {
+  background-color: #f1f5f9;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.problem-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+}
+
+.problem-card__title {
+  font-size: 1.1rem;
+  margin-bottom: 0.6rem;
+  color: var(--primary);
+}
+
+.problem-card__text {
+  font-size: 0.95rem;
+  color: rgba(15, 23, 42, 0.75);
+}
+
+/* Frase de cierre, jerarquía alta para marcar el giro hacia la solución */
+.problem__highlight {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(15, 23, 42, 0.1);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.15rem, 2vw + 0.8rem, 1.5rem);
+  color: var(--text-dark);
+  max-width: 60ch;
+}
+
+/* ==========================================================================
+   9. SECCIÓN 3 — SISTEMA NETFLOW (fondo oscuro, loop de 7 pasos)
+   ========================================================================== */
+.system {
+  background-color: var(--bg-dark);
+  padding: 4rem 0;
+}
+
+.system__title {
+  text-align: center;
+  font-size: clamp(1.6rem, 3.5vw + 1rem, 2.4rem);
+}
+
+.system__subtitle {
+  text-align: center;
+  color: rgba(248, 250, 252, 0.65);
+  max-width: 50ch;
+  margin: 0.75rem auto 0;
+}
+
+/* Grid mobile-first: 1 col -> 2 cols en tablet -> 4 cols en desktop
+   (07 queda solo/destacado en su propia fila para reforzar el loop) */
+.system__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  list-style: none;
+  counter-reset: none;
+}
+
+@media (min-width: 640px) {
+  .system__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .system__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.system-card {
+  position: relative;
+  background-color: rgba(248, 250, 252, 0.04);
+  border: 1px solid rgba(248, 250, 252, 0.08);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  transition: transform var(--transition), border-color var(--transition);
+}
+
+.system-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+}
+
+.system-card__num {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.6rem;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.system-card__title {
+  font-size: 1.05rem;
+  margin-bottom: 0.35rem;
+}
+
+.system-card__text {
+  font-size: 0.9rem;
+  color: rgba(248, 250, 252, 0.6);
+}
+
+/* Paso 07: se distingue visualmente porque cierra el loop y retroalimenta al 01 */
+.system-card--loop {
+  border-color: var(--primary);
+  background-color: rgba(0, 82, 255, 0.08);
+}
+
+.system-card--loop .system-card__num {
+  color: var(--primary);
+}
+
+/* Flecha de retorno: solo visible en desktop, donde el loop se lee como circuito */
+@media (min-width: 1024px) {
+  .system-card--loop::after {
+    content: "↺ vuelve al paso 01";
+    position: absolute;
+    bottom: -1.6rem;
+    left: 1.5rem;
+    font-size: 0.75rem;
+    color: var(--primary);
+    white-space: nowrap;
+  }
+}
+
+/* ==========================================================================
+   10. SECCIÓN 4 — CAPACIDADES (filas horizontales, sin cards)
+   ========================================================================== */
+.capabilities {
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  padding: 4rem 0;
+}
+
+.capabilities__title {
+  color: var(--text-dark);
+  text-align: center;
+  font-size: clamp(1.6rem, 3.5vw + 1rem, 2.4rem);
+  margin-bottom: 2.5rem;
+}
+
+.capabilities__list {
+  max-width: 800px;
+  margin-inline: auto;
+}
+
+/* Cada capacidad es una fila con separador, no una card */
+.capability-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.4rem 0;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+  transition: padding-left var(--transition), border-color var(--transition);
+}
+
+.capability-row:last-child {
+  border-bottom: none;
+}
+
+.capability-row:hover {
+  border-color: var(--primary);
+  padding-left: 0.5rem;
+}
+
+.capability-row__title {
+  color: var(--primary);
+  font-size: 1.1rem;
+}
+
+.capability-row__text {
+  color: rgba(15, 23, 42, 0.7);
+  font-size: 0.95rem;
+}
+
+/* Desde tablet: título y descripción en la misma línea */
+@media (min-width: 640px) {
+  .capability-row {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 1.5rem;
+  }
+
+  .capability-row__title {
+    flex: 0 0 200px;
+  }
+}
+
+/* ==========================================================================
+   11. SECCIÓN 5 — PARA QUIÉN ES (ICP + inversión + especialidades)
+   ========================================================================== */
+.icp {
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  padding: 4rem 0;
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.icp__title {
+  color: var(--text-dark);
+  max-width: 26ch;
+  font-size: clamp(1.6rem, 3.5vw + 1rem, 2.2rem);
+}
+
+.icp__text {
+  margin-top: 1.1rem;
+  max-width: 65ch;
+  color: rgba(15, 23, 42, 0.75);
+}
+
+/* Bloque de inversión: filtra al lead, por eso lleva marca visual fuerte */
+.icp__investment {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: rgba(0, 82, 255, 0.06);
+  border-left: 4px solid var(--primary);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.icp__investment p {
+  color: var(--text-dark);
+  font-size: 1rem;
+}
+
+.icp__investment strong {
+  color: var(--primary);
+}
+
+/* Tags de especialidades: mismo peso, sin jerarquía entre sí */
+.icp__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 2.25rem;
+}
+
+.tag {
+  padding: 0.5rem 1rem;
+  background-color: #f1f5f9;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: var(--text-dark);
+  transition: border-color var(--transition), color var(--transition);
+}
+
+.tag:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* ==========================================================================
+   12. SECCIÓN 6 — PLANES (3 tarjetas, GOLD destacada)
+   ========================================================================== */
+.pricing {
+  background-color: var(--bg-dark);
+  padding: 4rem 0;
+}
+
+.pricing__title {
+  text-align: center;
+  font-size: clamp(1.6rem, 3.5vw + 1rem, 2.4rem);
+}
+
+/* Nota aclaratoria: visible pero sin competir con el título */
+.pricing__note {
+  text-align: center;
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-top: 0.6rem;
+}
+
+/* Grid mobile-first: 1 columna, 3 desde desktop */
+.pricing__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 2.75rem;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .pricing__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.price-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(248, 250, 252, 0.04);
+  border: 1px solid rgba(248, 250, 252, 0.1);
+  border-radius: var(--radius);
+  padding: 2rem 1.75rem;
+  transition: transform var(--transition), border-color var(--transition);
+}
+
+.price-card:hover {
+  transform: translateY(-4px);
+}
+
+.price-card__name {
+  font-size: 1.3rem;
+}
+
+.price-card__tagline {
+  color: rgba(248, 250, 252, 0.6);
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.price-card__price {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 2.5vw + 1rem, 1.9rem);
+  color: var(--text-light);
+  margin-top: 1.25rem;
+}
+
+.price-card__period {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: rgba(248, 250, 252, 0.55);
+}
+
+.price-card__features {
+  margin-top: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.price-card__features li {
+  font-size: 0.9rem;
+  color: rgba(248, 250, 252, 0.75);
+  padding-left: 1.1rem;
+  position: relative;
+}
+
+/* Check simple con CSS, sin íconos externos */
+.price-card__features li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.price-card__cta {
+  margin-top: 2rem;
+  width: 100%;
+}
+
+/* GOLD: plan recomendado — borde primary, badge y elevación en desktop */
+.price-card--featured {
+  border-color: var(--primary);
+  background-color: rgba(0, 82, 255, 0.08);
+}
+
+@media (min-width: 1024px) {
+  .price-card--featured {
+    transform: scale(1.04);
+  }
+
+  .price-card--featured:hover {
+    transform: scale(1.04) translateY(-4px);
+  }
+}
+
+.price-card__badge {
+  position: absolute;
+  top: -0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--primary);
+  color: var(--text-light);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   13. SECCIÓN 7 — CASOS Y RESULTADOS (fondo claro, 3 tarjetas comparables)
+   ========================================================================== */
+.cases {
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  padding: 4rem 0;
+}
+
+.cases__title {
+  color: var(--text-dark);
+  text-align: center;
+  font-size: clamp(1.6rem, 3.5vw + 1rem, 2.4rem);
+}
+
+/* Aclaración de confidencialidad: presente pero secundaria */
+.cases__note {
+  text-align: center;
+  max-width: 55ch;
+  margin: 0.75rem auto 0;
+  font-size: 0.9rem;
+  color: rgba(15, 23, 42, 0.6);
+}
+
+/* Grid mobile-first: 1 col -> 3 cols desde desktop */
+.cases__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 2.75rem;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .cases__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.case-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #f1f5f9;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.case-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+}
+
+/* Cabecera: identificación reservada + especialidad + ciudad */
+.case-card__head {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+}
+
+.case-card__client {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(15, 23, 42, 0.5);
+}
+
+.case-card__specialty {
+  color: var(--text-dark);
+  font-size: 1.2rem;
+  margin-top: 0.35rem;
+}
+
+.case-card__city {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.9rem;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Cuerpo en <dl>: cada dato con la misma etiqueta en las 3 tarjetas */
+.case-card__body {
+  margin-top: 1.1rem;
+}
+
+.case-card__body dt {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(15, 23, 42, 0.5);
+  margin-top: 1rem;
+}
+
+.case-card__body dt:first-child {
+  margin-top: 0;
+}
+
+.case-card__body dd {
+  font-size: 0.92rem;
+  color: rgba(15, 23, 42, 0.78);
+  margin-top: 0.3rem;
+}
+
+/* Resultado medible: es el dato que justifica el caso, va destacado */
+.case-card__result {
+  font-weight: 600;
+  color: var(--primary) !important;
+  background-color: rgba(0, 82, 255, 0.06);
+  border-left: 3px solid var(--primary);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 0.6rem 0.85rem;
+}
+
+/* ==========================================================================
+   14. SECCIÓN 8 — DIFERENCIADOR (fondo oscuro, 2 columnas comparativas)
+   ========================================================================== */
+.differentiator {
+  background-color: var(--bg-dark);
+  padding: 4rem 0;
+}
+
+.differentiator__title {
+  text-align: center;
+  font-size: clamp(1.6rem, 3.5vw + 1rem, 2.4rem);
+}
+
+.differentiator__subtitle {
+  text-align: center;
+  max-width: 55ch;
+  margin: 0.85rem auto 0;
+  color: rgba(248, 250, 252, 0.65);
+}
+
+/* Mobile-first: columnas apiladas; desde tablet, lado a lado para comparar */
+.differentiator__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 2.75rem;
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .differentiator__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.compare-col {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid rgba(248, 250, 252, 0.1);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+}
+
+.compare-col__title {
+  font-size: 1.2rem;
+  text-align: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(248, 250, 252, 0.1);
+}
+
+/* Cadena de pasos: cada item se conecta con el siguiente vía ::after */
+.compare-col__flow {
+  list-style: none;
+  margin-top: 1.5rem;
+  flex-grow: 1;
+}
+
+.flow-step {
+  position: relative;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: var(--radius);
+  background-color: rgba(248, 250, 252, 0.05);
+  border: 1px solid rgba(248, 250, 252, 0.1);
+  margin-bottom: 2rem;
+}
+
+/* Conector vertical entre pasos (no se dibuja después del último) */
+.flow-step:not(:last-child)::after {
+  content: "➔";
+  position: absolute;
+  bottom: -1.65rem;
+  left: 50%;
+  transform: translateX(-50%) rotate(90deg);
+  font-size: 0.85rem;
+  color: rgba(248, 250, 252, 0.35);
+}
+
+.flow-step:last-child {
+  margin-bottom: 0;
+}
+
+/* Columna "agencia": el flujo se corta en el lead */
+.compare-col--them {
+  background-color: rgba(248, 250, 252, 0.02);
+}
+
+.flow-step--end {
+  border-style: dashed;
+  border-color: rgba(248, 250, 252, 0.3);
+  color: rgba(248, 250, 252, 0.6);
+}
+
+/* Columna "NetFlow": destacada, es la propuesta */
+.compare-col--us {
+  border-color: var(--primary);
+  background-color: rgba(0, 82, 255, 0.08);
+}
+
+.compare-col--us .flow-step {
+  border-color: rgba(0, 240, 255, 0.25);
+  background-color: rgba(0, 240, 255, 0.05);
+}
+
+.compare-col--us .flow-step:not(:last-child)::after {
+  color: var(--accent);
+}
+
+/* "Paciente": el objetivo real del sistema */
+.flow-step--goal {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: var(--text-light);
+}
+
+.compare-col__note {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(248, 250, 252, 0.1);
+  text-align: center;
+  font-size: 0.9rem;
+  color: rgba(248, 250, 252, 0.6);
+}
+
+.compare-col--us .compare-col__note {
+  color: var(--accent);
+}
+
+/* ==========================================================================
+   15. SECCIÓN 9 — FAQ (acordeón: panel con [hidden], toggle desde JS)
+   ========================================================================== */
+.faq {
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  padding: 4rem 0;
+}
+
+.faq__title {
+  color: var(--text-dark);
+  text-align: center;
+  font-size: clamp(1.6rem, 3.5vw + 1rem, 2.4rem);
+  margin-bottom: 2.5rem;
+}
+
+.faq__list {
+  max-width: 800px;
+  margin-inline: auto;
+}
+
+.faq-item {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.12);
+}
+
+.faq-item__heading {
+  margin: 0;
+}
+
+/* El disparador es un <button> real: accesible por teclado y lector de pantalla */
+.faq-item__question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-dark);
+  transition: color var(--transition);
+}
+
+.faq-item__question:hover,
+.faq-item__question[aria-expanded="true"] {
+  color: var(--primary);
+}
+
+.faq-item__question:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Ícono +/− dibujado con CSS, sin dependencias externas */
+.faq-item__icon {
+  position: relative;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+.faq-item__icon::before,
+.faq-item__icon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: currentColor;
+  transform: translate(-50%, -50%);
+  transition: transform var(--transition), opacity var(--transition);
+}
+
+.faq-item__icon::before {
+  width: 14px;
+  height: 2px;
+}
+
+.faq-item__icon::after {
+  width: 2px;
+  height: 14px;
+}
+
+/* Abierto: la barra vertical desaparece y el "+" queda como "−" */
+.faq-item__question[aria-expanded="true"] .faq-item__icon::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+  opacity: 0;
+}
+
+.faq-item__panel {
+  padding: 0 0 1.35rem;
+}
+
+.faq-item__panel p {
+  font-size: 0.95rem;
+  color: rgba(15, 23, 42, 0.75);
+  max-width: 70ch;
+}
+
+/* ==========================================================================
+   16. SECCIÓN 10 — CTA FINAL + FORMULARIO PROGRESIVO
+   ========================================================================== */
+.final-cta {
+  background-color: var(--bg-dark);
+  background-image: radial-gradient(60% 50% at 50% 0%, rgba(0, 82, 255, 0.18), transparent 70%);
+  padding: 4rem 0 4.5rem;
+}
+
+.final-cta__intro {
+  text-align: center;
+  max-width: 700px;
+  margin-inline: auto;
+}
+
+.final-cta__title {
+  font-size: clamp(1.6rem, 3.5vw + 1rem, 2.4rem);
+}
+
+.final-cta__text {
+  margin-top: 1rem;
+  color: rgba(248, 250, 252, 0.7);
+}
+
+/* Card del formulario */
+.qform {
+  max-width: 640px;
+  margin: 2.5rem auto 0;
+  background-color: rgba(248, 250, 252, 0.04);
+  border: 1px solid rgba(248, 250, 252, 0.1);
+  border-radius: var(--radius);
+  padding: 1.75rem 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .qform {
+    padding: 2.25rem;
+  }
+}
+
+/* Progreso: 3 puntos, el activo se ensancha */
+.qform__progress {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.qform__step-dot {
+  width: 28px;
+  height: 4px;
+  border-radius: 999px;
+  background-color: rgba(248, 250, 252, 0.18);
+  transition: background-color var(--transition), width var(--transition);
+}
+
+.qform__step-dot.is-active {
+  width: 48px;
+  background-color: var(--accent);
+}
+
+/* Estado textual del paso: también lo anuncia el lector de pantalla */
+.qform__status {
+  text-align: center;
+  margin-top: 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(248, 250, 252, 0.6);
+}
+
+/* Solo el fieldset con .is-active se muestra */
+.qform__step {
+  display: none;
+  border: none;
+  margin-top: 1.5rem;
+}
+
+.qform__step.is-active {
+  display: block;
+}
+
+.qform__legend {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--text-light);
+  margin-bottom: 1.25rem;
+}
+
+.field {
+  margin-bottom: 1.15rem;
+}
+
+.field__label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(248, 250, 252, 0.8);
+  margin-bottom: 0.4rem;
+}
+
+.field__label span {
+  color: var(--accent);
+}
+
+.field__input {
+  width: 100%;
+  padding: 0.8rem 0.9rem;
+  font-family: var(--font-body);
+  font-size: 1rem; /* 16px evita el zoom automático en iOS */
+  color: var(--text-light);
+  background-color: rgba(7, 13, 25, 0.6);
+  border: 1px solid rgba(248, 250, 252, 0.16);
+  border-radius: var(--radius);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.field__input::placeholder {
+  color: rgba(248, 250, 252, 0.35);
+}
+
+.field__input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.15);
+}
+
+/* Flecha propia para el select (el nativo no se puede estilar) */
+.field__select {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, rgba(248, 250, 252, 0.6) 50%),
+                    linear-gradient(135deg, rgba(248, 250, 252, 0.6) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 55%, calc(100% - 14px) 55%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 2.5rem;
+}
+
+.field__select option {
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+}
+
+/* Radios Sí/No como pastillas seleccionables */
+.field__radios {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.radio {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(248, 250, 252, 0.16);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: border-color var(--transition), background-color var(--transition);
+}
+
+.radio:hover {
+  border-color: var(--accent);
+}
+
+.radio input {
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.radio:has(input:checked) {
+  border-color: var(--primary);
+  background-color: rgba(0, 82, 255, 0.15);
+}
+
+/* Mensaje de error por campo: oculto hasta que JS lo completa */
+.field__error {
+  font-size: 0.8rem;
+  color: #ff6b6b;
+  margin-top: 0.35rem;
+  min-height: 1rem;
+}
+
+.field__error:empty {
+  display: none;
+}
+
+/* Campo inválido: marca el borde en rojo */
+.field__input[aria-invalid="true"] {
+  border-color: #ff6b6b;
+}
+
+.field__radios[data-invalid="true"] .radio {
+  border-color: #ff6b6b;
+}
+
+/* Navegación: mobile en columna, desde tablet en fila */
+.qform__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+@media (min-width: 640px) {
+  .qform__actions {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+
+  .qform__back {
+    margin-right: auto;
+  }
+}
+
+.qform__actions .btn {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .qform__actions .btn {
+    width: auto;
+    min-width: 160px;
+  }
+}
+
+/* Confirmación de envío */
+.qform__success {
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--accent);
+  background-color: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: var(--radius);
+}
+
+/* ==========================================================================
+   17. FOOTER — contacto directo + legal
+   ========================================================================== */
+.site-footer {
+  background-color: var(--bg-dark);
+  border-top: 1px solid rgba(248, 250, 252, 0.1);
+  padding: 3rem 0 2rem;
+}
+
+/* Mobile-first: apilado; desde tablet, marca a la izquierda y contacto a la derecha */
+.site-footer__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .site-footer__inner {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+}
+
+.site-footer__logo {
+  height: 28px;
+  width: auto;
+}
+
+.site-footer__claim {
+  margin-top: 0.85rem;
+  max-width: 34ch;
+  font-size: 0.9rem;
+  color: rgba(248, 250, 252, 0.55);
+}
+
+.site-footer__contact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  font-size: 0.95rem;
+}
+
+@media (min-width: 768px) {
+  .site-footer__contact {
+    text-align: right;
+  }
+}
+
+.site-footer__contact a {
+  color: rgba(248, 250, 252, 0.8);
+  transition: color var(--transition);
+}
+
+.site-footer__contact a:hover {
+  color: var(--accent);
+}
+
+.site-footer__legal {
+  max-width: var(--container-max);
+  margin: 2.5rem auto 0;
+  padding: 1.5rem 1.25rem 0;
+  border-top: 1px solid rgba(248, 250, 252, 0.08);
+  text-align: center;
+  font-size: 0.82rem;
+  color: rgba(248, 250, 252, 0.45);
+}
