@@ -13,6 +13,8 @@
   --font-body: 'Inter', sans-serif;
 
   --container-max: 1180px;
+  /* Alto real del header sticky: compensa el salto de los anclas (#planes, #diagnostico) */
+  --header-h: 96px;
   --radius: 10px;
   --transition: 0.2s ease-in-out;
 }
@@ -30,6 +32,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* Sin esto, los anclas quedan tapados por el header sticky */
+  scroll-padding-top: var(--header-h);
 }
 
 body {
@@ -52,6 +56,39 @@ a {
 
 ul {
   list-style: none;
+}
+
+/* Foco visible global: sin esto los enlaces de texto (footer, contacto)
+   no muestran ningún indicador al navegar con teclado */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Salto directo al contenido: visible solo cuando recibe foco */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 100;
+  padding: 0.7rem 1.2rem;
+  background-color: var(--accent);
+  color: var(--text-dark);
+  font-weight: 600;
+  border-radius: var(--radius);
+  transition: top var(--transition);
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* El header crece en desktop (logo 72px), el offset de scroll lo acompaña */
+@media (min-width: 768px) {
+  :root {
+    --header-h: 112px;
+  }
 }
 
 /* Respeta preferencia de reducción de movimiento */
@@ -104,6 +141,14 @@ p {
   background-color: rgba(7, 13, 25, 0.85);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid rgba(248, 250, 252, 0.08);
+}
+
+/* Estado que aplica script.js al scrollear: refuerza el contraste
+   cuando el contenido pasa por debajo del header */
+.site-header.is-scrolled {
+  background-color: rgba(7, 13, 25, 0.96);
+  border-bottom-color: rgba(248, 250, 252, 0.14);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
 }
 
 .navbar {
@@ -1260,6 +1305,26 @@ p {
   background-color: rgba(0, 240, 255, 0.08);
   border: 1px solid rgba(0, 240, 255, 0.3);
   border-radius: var(--radius);
+}
+
+/* Error de envío: mismo formato que la confirmación, en rojo */
+.qform__error {
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ff6b6b;
+  background-color: rgba(255, 107, 107, 0.08);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: var(--radius);
+}
+
+/* Botón deshabilitado mientras se envía el formulario */
+.btn[disabled] {
+  opacity: 0.6;
+  cursor: progress;
+  pointer-events: none;
 }
 
 /* ==========================================================================

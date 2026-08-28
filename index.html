@@ -7,8 +7,13 @@
   <title>NetFlow | Sistema de captación y agenda para consultorios privados</title>
   <meta name="description" content="NetFlow es el sistema B2B que integra publicidad, seguimiento, agenda y medición para que especialistas de salud de alto valor llenen su consultorio con pacientes que reservan y asisten.">
   <link rel="canonical" href="https://www.netflow.com.ar/">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="author" content="NetFlow">
+  <meta name="theme-color" content="#070d19">
+
   <!-- Favicon / Ícono de la pestaña -->
-<link rel="icon" type="image/png" href="assets/logo-netflow.png">
+  <link rel="icon" type="image/png" href="assets/logo-netflow.png">
+  <link rel="apple-touch-icon" href="assets/logo-netflow.png">
 
   <!-- OpenGraph: previsualización al compartir en redes/WhatsApp -->
   <meta property="og:type" content="website">
@@ -16,6 +21,15 @@
   <meta property="og:description" content="Publicidad, seguimiento, agenda y medición funcionando como un sistema único para especialistas de alto valor.">
   <meta property="og:image" content="https://www.netflow.com.ar/assets/logo-netflow.png">
   <meta property="og:locale" content="es_AR">
+  <meta property="og:url" content="https://www.netflow.com.ar/">
+  <meta property="og:site_name" content="NetFlow">
+  <meta property="og:image:alt" content="Logo de NetFlow">
+
+  <!-- Twitter/X: sin esto la tarjeta se muestra sin imagen -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="NetFlow | Llená la agenda de tu consultorio privado">
+  <meta name="twitter:description" content="Publicidad, seguimiento, agenda y medición funcionando como un sistema único para especialistas de alto valor.">
+  <meta name="twitter:image" content="https://www.netflow.com.ar/assets/logo-netflow.png">
 
   <!-- Tipografía y estilos -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +37,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Datos estructurados: le indica a Google que esta imagen es el logo oficial de la marca -->
+  <!-- Datos estructurados: identifica la marca, el logo oficial y los canales de contacto -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -31,11 +45,89 @@
     "name": "NetFlow",
     "url": "https://www.netflow.com.ar/",
     "logo": "https://www.netflow.com.ar/assets/logo-netflow.png",
-    "description": "Sistema de adquisición de pacientes para consultorios privados de alto valor."
+    "image": "https://www.netflow.com.ar/assets/logo-netflow.png",
+    "description": "Sistema de adquisición de pacientes para consultorios privados de alto valor: publicidad, seguimiento, agenda y medición.",
+    "areaServed": "AR",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+54 11 6829 2740",
+      "email": "netflow.contacto@gmail.com",
+      "contactType": "sales",
+      "availableLanguage": "Spanish"
+    }
+  }
+  </script>
+
+  <!-- FAQPage: habilita resultados enriquecidos con las preguntas frecuentes -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "¿La inversión en pauta publicitaria está incluida en el plan?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Los planes cubren estrategia, gestión, automatización, conversión y medición. La pauta se paga aparte y directamente a la plataforma, con tu propia cuenta publicitaria. El presupuesto recomendado lo definimos juntos según tu especialidad, tu ciudad y el ticket del tratamiento."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿En cuánto tiempo se ven resultados?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "La implementación toma entre 2 y 3 semanas. Las primeras consultas suelen aparecer en el primer mes, pero el sistema recién muestra su rendimiento real entre el segundo y el tercero, cuando hay datos suficientes para optimizar campañas, mensajes y calificación."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Hay contrato de permanencia?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Trabajamos con un compromiso inicial de 3 meses, que es el tiempo mínimo para implementar el sistema y medirlo con seriedad. Después la relación continúa mes a mes. No usamos cláusulas de permanencia forzada."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Trabajan con mi competencia directa?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Tomamos un solo cliente por especialidad y zona de influencia. Si ya estamos trabajando con un colega de tu misma especialidad en tu ciudad, te lo decimos en el diagnóstico antes de avanzar."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Garantizan una cantidad de pacientes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No garantizamos números de pacientes: sería deshonesto, porque dependen de tu ticket, tu capacidad de atención y tu mercado. Lo que sí garantizamos es la metodología: el sistema implementado completo, la medición de cada etapa del funnel y reporting transparente sobre leads, turnos, asistencia y pacientes."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Necesito tener equipo propio o secretaria?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No es requisito. Nuestro setter se ocupa del primer contacto, el seguimiento y la calificación. Si ya tenés secretaria o equipo comercial, integramos el sistema a su forma de trabajo y les damos los flujos y el CRM para que no se pierda ninguna consulta."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Puedo cambiar de plan más adelante?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sí. Podés subir o bajar de plan al cierre de cada mes. Es habitual empezar en Silver para validar el canal y pasar a Gold o Platinum cuando el volumen de consultas justifica automatizaciones, desarrollo y más campañas en paralelo."
+        }
+      }
+    ]
   }
   </script>
 </head>
 <body>
+
+  <!-- Accesibilidad: permite saltear el header al navegar con teclado o lector de pantalla -->
+  <a class="skip-link" href="#contenido">Saltar al contenido principal</a>
 
   <!-- HEADER: logo + CTA directo a WhatsApp, siempre visible -->
   <header class="site-header">
@@ -54,7 +146,7 @@
     </nav>
   </header>
 
-  <main>
+  <main id="contenido">
     <!-- SECCIÓN 1: HERO — propuesta de valor + doble CTA, sin scroll en mobile -->
     <section class="hero" id="hero">
       <div class="hero__content">
@@ -556,20 +648,20 @@
 
             <div class="field">
               <label class="field__label" for="especialidad">Especialidad o institución <span aria-hidden="true">*</span></label>
-              <input class="field__input" type="text" id="especialidad" name="especialidad" required autocomplete="organization" placeholder="Ej.: Cirugía plástica / Centro odontológico">
-              <p class="field__error" data-error-for="especialidad"></p>
+              <input class="field__input" type="text" id="especialidad" name="especialidad" required autocomplete="organization" placeholder="Ej.: Cirugía plástica / Centro odontológico" aria-describedby="err-especialidad">
+              <p class="field__error" id="err-especialidad" role="alert" data-error-for="especialidad"></p>
             </div>
 
             <div class="field">
               <label class="field__label" for="ciudad">Ciudad <span aria-hidden="true">*</span></label>
-              <input class="field__input" type="text" id="ciudad" name="ciudad" required autocomplete="address-level2" placeholder="Ej.: CABA, Córdoba, Rosario">
-              <p class="field__error" data-error-for="ciudad"></p>
+              <input class="field__input" type="text" id="ciudad" name="ciudad" required autocomplete="address-level2" placeholder="Ej.: CABA, Córdoba, Rosario" aria-describedby="err-ciudad">
+              <p class="field__error" id="err-ciudad" role="alert" data-error-for="ciudad"></p>
             </div>
 
             <div class="field">
               <label class="field__label" for="tratamiento">Tratamiento a potenciar <span aria-hidden="true">*</span></label>
-              <input class="field__input" type="text" id="tratamiento" name="tratamiento" required placeholder="Ej.: Rinoplastia, implantes, trasplante capilar">
-              <p class="field__error" data-error-for="tratamiento"></p>
+              <input class="field__input" type="text" id="tratamiento" name="tratamiento" required placeholder="Ej.: Rinoplastia, implantes, trasplante capilar" aria-describedby="err-tratamiento">
+              <p class="field__error" id="err-tratamiento" role="alert" data-error-for="tratamiento"></p>
             </div>
           </fieldset>
 
@@ -579,7 +671,7 @@
 
             <div class="field">
               <span class="field__label">¿Atendés particulares? <span aria-hidden="true">*</span></span>
-              <div class="field__radios" role="radiogroup" aria-label="¿Atendés particulares?">
+              <div class="field__radios" role="radiogroup" aria-label="¿Atendés particulares?" aria-describedby="err-particulares">
                 <label class="radio">
                   <input type="radio" name="particulares" value="si" required>
                   <span>Sí</span>
@@ -589,18 +681,18 @@
                   <span>No</span>
                 </label>
               </div>
-              <p class="field__error" data-error-for="particulares"></p>
+              <p class="field__error" id="err-particulares" role="alert" data-error-for="particulares"></p>
             </div>
 
             <div class="field">
               <label class="field__label" for="pacientes-adicionales">Pacientes adicionales que podrías atender por mes</label>
-              <input class="field__input" type="number" id="pacientes-adicionales" name="pacientes_adicionales" min="0" step="1" placeholder="Ej.: 15">
-              <p class="field__error" data-error-for="pacientes_adicionales"></p>
+              <input class="field__input" type="number" id="pacientes-adicionales" name="pacientes_adicionales" min="0" step="1" placeholder="Ej.: 15" aria-describedby="err-pacientes_adicionales">
+              <p class="field__error" id="err-pacientes_adicionales" role="alert" data-error-for="pacientes_adicionales"></p>
             </div>
 
             <div class="field">
               <label class="field__label" for="inversion">Inversión actual en publicidad <span aria-hidden="true">*</span></label>
-              <select class="field__input field__select" id="inversion" name="inversion" required>
+              <select class="field__input field__select" id="inversion" name="inversion" required aria-describedby="err-inversion">
                 <option value="">Seleccioná una opción</option>
                 <option value="0">No invierto actualmente</option>
                 <option value="menos-500k">Menos de $500.000 por mes</option>
@@ -608,7 +700,7 @@
                 <option value="1m-2m">Entre $1.000.000 y $2.000.000 por mes</option>
                 <option value="mas-2m">Más de $2.000.000 por mes</option>
               </select>
-              <p class="field__error" data-error-for="inversion"></p>
+              <p class="field__error" id="err-inversion" role="alert" data-error-for="inversion"></p>
             </div>
           </fieldset>
 
@@ -618,20 +710,20 @@
 
             <div class="field">
               <label class="field__label" for="nombre">Nombre y apellido <span aria-hidden="true">*</span></label>
-              <input class="field__input" type="text" id="nombre" name="nombre" required autocomplete="name" placeholder="Ej.: María Gómez">
-              <p class="field__error" data-error-for="nombre"></p>
+              <input class="field__input" type="text" id="nombre" name="nombre" required autocomplete="name" placeholder="Ej.: María Gómez" aria-describedby="err-nombre">
+              <p class="field__error" id="err-nombre" role="alert" data-error-for="nombre"></p>
             </div>
 
             <div class="field">
               <label class="field__label" for="whatsapp">WhatsApp <span aria-hidden="true">*</span></label>
-              <input class="field__input" type="tel" id="whatsapp" name="whatsapp" required autocomplete="tel" inputmode="tel" placeholder="Ej.: 11 6829 2740">
-              <p class="field__error" data-error-for="whatsapp"></p>
+              <input class="field__input" type="tel" id="whatsapp" name="whatsapp" required autocomplete="tel" inputmode="tel" placeholder="Ej.: 11 6829 2740" aria-describedby="err-whatsapp">
+              <p class="field__error" id="err-whatsapp" role="alert" data-error-for="whatsapp"></p>
             </div>
 
             <div class="field">
               <label class="field__label" for="email">Email <span aria-hidden="true">*</span></label>
-              <input class="field__input" type="email" id="email" name="email" required autocomplete="email" inputmode="email" placeholder="Ej.: nombre@consultorio.com">
-              <p class="field__error" data-error-for="email"></p>
+              <input class="field__input" type="email" id="email" name="email" required autocomplete="email" inputmode="email" placeholder="Ej.: nombre@consultorio.com" aria-describedby="err-email">
+              <p class="field__error" id="err-email" role="alert" data-error-for="email"></p>
             </div>
           </fieldset>
 
@@ -645,6 +737,12 @@
           <!-- Mensaje de confirmación tras el envío -->
           <p class="qform__success" id="qform-success" role="status" hidden>
             ¡Listo! Recibimos tus datos. Te escribimos por WhatsApp dentro de las próximas 24 horas hábiles.
+          </p>
+
+          <!-- Aviso de fallo de envío: el lead nunca queda en silencio -->
+          <p class="qform__error" id="qform-error" role="alert" hidden>
+            No pudimos enviar el formulario. Probá de nuevo o escribinos directamente por
+            <a href="https://wa.me/541168292740" target="_blank" rel="noopener noreferrer">WhatsApp</a>.
           </p>
         </form>
       </div>
@@ -666,8 +764,8 @@
           </a>
         </li>
         <li>
-          <a href="mailto:Netflow.contacto@gmail.com" data-action="email-footer">
-            Netflow.contacto@gmail.com
+          <a href="mailto:netflow.contacto@gmail.com" data-action="email-footer">
+            netflow.contacto@gmail.com
           </a>
         </li>
       </ul>

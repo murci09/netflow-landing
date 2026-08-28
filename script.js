@@ -3,6 +3,20 @@
  * Estructura base de eventos. Se ejecuta cuando el DOM está listo.
  */
 
+/* ==========================================================================
+   CONFIGURACIÓN — editar solo estas dos constantes
+   ========================================================================== */
+
+/**
+ * Endpoint que recibe los leads (Formspree, Make, n8n, tu propia API...).
+ * Mientras esté vacío el lead NO se pierde: el formulario deriva los datos
+ * a WhatsApp ya cargados para que la conversación arranque igual.
+ */
+const FORM_ENDPOINT = '';
+
+/** WhatsApp de NetFlow en formato internacional, solo dígitos. */
+const WHATSAPP_NUMBER = '541168292740';
+
 document.addEventListener('DOMContentLoaded', () => {
   initCtaTracking();
   initHeaderScrollState();
@@ -100,6 +114,11 @@ function initQualifyForm() {
   const btnPrev = form.querySelector('[data-nav="prev"]');
   const btnNext = form.querySelector('[data-nav="next"]');
   const btnSubmit = form.querySelector('.qform__submit');
+  const errorBox = form.querySelector('#qform-error');
+
+  // Si falta cualquier pieza de la navegación, el formulario no se inicializa
+  // en vez de romper con un TypeError sobre un nodo inexistente.
+  if (!steps.length || !btnPrev || !btnNext || !btnSubmit) return;
 
   // Títulos por paso, para el indicador de progreso
   const stepLabels = ['Tu práctica', 'Tu situación comercial', 'Tus datos de contacto'];
@@ -198,7 +217,10 @@ function initQualifyForm() {
 
   // Enter dentro de un input avanza de paso en vez de enviar el formulario
   form.addEventListener('keydown', (event) => {
-    if (event.key !== 'Enter' || event.target.tagName === 'TEXTAREA') return;
+    const tag = event.target.tagName;
+    // En BUTTON, Enter ya tiene su propio significado (activarlo): interceptarlo
+    // hacía que "Volver" avanzara de paso en lugar de retroceder.
+    if (event.key !== 'Enter' || tag === 'TEXTAREA' || tag === 'BUTTON') return;
     if (currentStep < steps.length - 1) {
       event.preventDefault();
       btnNext.click();
@@ -206,31 +228,93 @@ function initQualifyForm() {
   });
 
   // Envío final: revalida todos los pasos antes de dar por completado
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    for (let i = 0; i < steps.length; i++) {
-      if (!validateStep(i)) {
-        currentStep = i;
-        renderStep(i);
-        return;
-      }
+    // Cada paso se renderiza ANTES de validarlo. Si el paso sigue en
+    // display:none, el focus() sobre el primer campo con error no hace nada
+    // y el usuario se queda sin saber qué tiene que corregir.
+    for (let i = 0; i < steps.length; i += 1) {
+      currentStep = i;
+      renderStep(i);
+      if (!validateStep(i)) return;
     }
 
-    // Datos listos para enviar al backend / CRM
     const payload = Object.fromEntries(new FormData(form).entries());
-    console.log('[NetFlow] Lead calificado:', payload);
+    setSubmitting(true);
 
-    // TODO: reemplazar por el POST real al endpoint/CRM
-    // fetch('/api/leads', { method: 'POST', body: JSON.stringify(payload) });
-
-    steps.forEach((step) => step.classList.remove('is-active'));
-    form.querySelector('.qform__actions').hidden = true;
-    if (status) status.textContent = 'Formulario enviado';
-    if (success) success.hidden = false;
+    try {
+      if (FORM_ENDPOINT) {
+        const response = await fetch(FORM_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!response.ok) throw new Error(`El endpoint respondió ${response.status}`);
+      } else {
+        // window.open va antes de cualquier await: así sigue contando como
+        // gesto del usuario y el bloqueador de pop-ups no lo frena.
+        window.open(buildWhatsappUrl(payload), '_blank', 'noopener');
+      }
+      showSuccess(!FORM_ENDPOINT);
+    } catch (error) {
+      console.error('[NetFlow] Falló el envío del lead:', error);
+      setSubmitting(false);
+      if (errorBox) errorBox.hidden = false;
+      if (status) status.textContent = 'No se pudo enviar el formulario';
+    }
   });
 
+  /** Bloquea el botón mientras se envía, para evitar leads duplicados. */
+  function setSubmitting(isSubmitting) {
+    if (errorBox) errorBox.hidden = true;
+    btnSubmit.disabled = isSubmitting;
+    btnSubmit.textContent = isSubmitting ? 'Enviando…' : 'Agendar diagnóstico';
+  }
+
+  /**
+   * Reemplaza el formulario por la confirmación. El texto cambia según la vía:
+   * por WhatsApp el mensaje todavía lo tiene que enviar el usuario, así que
+   * prometer "recibimos tus datos" sería mentirle.
+   */
+  function showSuccess(viaWhatsapp) {
+    steps.forEach((step) => step.classList.remove('is-active'));
+    const actions = form.querySelector('.qform__actions');
+    if (actions) actions.hidden = true;
+    if (status) status.textContent = 'Formulario enviado';
+    if (!success) return;
+    if (viaWhatsapp) {
+      success.textContent = 'Abrimos WhatsApp con tus datos ya cargados. Enviá el mensaje y te respondemos dentro de las próximas 24 horas hábiles.';
+    }
+    success.hidden = false;
+  }
+
   renderStep(currentStep);
+}
+
+/**
+ * Arma el link de WhatsApp con el lead ya redactado. Es la red de seguridad
+ * mientras no haya FORM_ENDPOINT: el contacto llega igual.
+ */
+function buildWhatsappUrl(payload) {
+  const labels = {
+    nombre: 'Nombre',
+    especialidad: 'Especialidad',
+    ciudad: 'Ciudad',
+    tratamiento: 'Tratamiento a potenciar',
+    particulares: 'Atiende particulares',
+    pacientes_adicionales: 'Pacientes adicionales por mes',
+    inversion: 'Inversión actual en publicidad',
+    whatsapp: 'WhatsApp',
+    email: 'Email',
+  };
+
+  const lines = Object.entries(labels)
+    .filter(([key]) => payload[key])
+    .map(([key, label]) => `${label}: ${payload[key]}`);
+
+  const message = ['Hola NetFlow, quiero agendar un diagnóstico.', '', ...lines].join('\n');
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
 /** Marca un campo como inválido y muestra su mensaje. */
