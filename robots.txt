@@ -1,4 +1,10 @@
+# robots.txt - https://www.netflow.com.ar/
+# Landing one-page: todo el contenido es indexable.
+
 User-agent: *
 Allow: /
+
+# Nada que bloquear por ahora. Si en el futuro se suman
+# /gracias/ o parametros de campana, excluirlos aca.
 
 Sitemap: https://www.netflow.com.ar/sitemap.xml

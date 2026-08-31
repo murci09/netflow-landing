@@ -4,12 +4,15 @@
   <!-- Configuración base y SEO técnico -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NetFlow | Sistema de captación y agenda para consultorios privados</title>
-  <meta name="description" content="NetFlow es el sistema B2B que integra publicidad, seguimiento, agenda y medición para que especialistas de salud de alto valor llenen su consultorio con pacientes que reservan y asisten.">
+  <title>Captación de pacientes para consultorios privados | NetFlow</title>
+  <meta name="description" content="Sistema de captación de pacientes para consultorios privados: publicidad, seguimiento, agenda y medición en un solo lugar. Agendá tu diagnóstico sin costo.">
   <link rel="canonical" href="https://www.netflow.com.ar/">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <meta name="author" content="NetFlow">
   <meta name="theme-color" content="#070d19">
+
+  <!-- Precarga del logo: es el elemento LCP en mobile -->
+  <link rel="preload" as="image" href="assets/logo-netflow.png" fetchpriority="high">
 
   <!-- Favicon / Ícono de la pestaña -->
   <link rel="icon" type="image/png" href="assets/logo-netflow.png">
@@ -17,19 +20,26 @@
 
   <!-- OpenGraph: previsualización al compartir en redes/WhatsApp -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="NetFlow | Llená la agenda de tu consultorio privado">
-  <meta property="og:description" content="Publicidad, seguimiento, agenda y medición funcionando como un sistema único para especialistas de alto valor.">
+  <meta property="og:title" content="Captación de pacientes para consultorios privados | NetFlow">
+  <meta property="og:description" content="Sistema de captación de pacientes para consultorios privados: publicidad, seguimiento, agenda y medición en un solo lugar. Agendá tu diagnóstico sin costo.">
+  <!-- TODO SEO: la OG image tiene que ser un banner de 1200x630 px
+       (assets/og-netflow-1200x630.png). Hoy apunta al logo cuadrado y
+       Facebook, LinkedIn y WhatsApp lo recortan mal. Las medidas declaradas
+       abajo ya asumen el banner: subir el archivo y cambiar la URL. -->
   <meta property="og:image" content="https://www.netflow.com.ar/assets/logo-netflow.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="NetFlow, sistema de captación de pacientes para consultorios privados">
   <meta property="og:locale" content="es_AR">
   <meta property="og:url" content="https://www.netflow.com.ar/">
   <meta property="og:site_name" content="NetFlow">
-  <meta property="og:image:alt" content="Logo de NetFlow">
 
   <!-- Twitter/X: sin esto la tarjeta se muestra sin imagen -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="NetFlow | Llená la agenda de tu consultorio privado">
-  <meta name="twitter:description" content="Publicidad, seguimiento, agenda y medición funcionando como un sistema único para especialistas de alto valor.">
+  <meta name="twitter:title" content="Captación de pacientes para consultorios privados | NetFlow">
+  <meta name="twitter:description" content="Sistema de captación de pacientes para consultorios privados: publicidad, seguimiento, agenda y medición en un solo lugar. Agendá tu diagnóstico sin costo.">
   <meta name="twitter:image" content="https://www.netflow.com.ar/assets/logo-netflow.png">
+  <meta name="twitter:image:alt" content="NetFlow, sistema de captación de pacientes para consultorios privados">
 
   <!-- Tipografía y estilos -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,7 +47,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Datos estructurados: identifica la marca, el logo oficial y los canales de contacto -->
+  <!-- Datos estructurados: identifica la marca, el logo oficial y los canales de contacto.
+       TODO SEO: "sameAs" queda como array vacio a proposito. Cuando existan los perfiles
+       oficiales, cargar ahi las URLs de Instagram, LinkedIn y Facebook (una por linea);
+       si no se van a publicar perfiles, borrar la propiedad entera. -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -46,14 +59,36 @@
     "url": "https://www.netflow.com.ar/",
     "logo": "https://www.netflow.com.ar/assets/logo-netflow.png",
     "image": "https://www.netflow.com.ar/assets/logo-netflow.png",
-    "description": "Sistema de adquisición de pacientes para consultorios privados de alto valor: publicidad, seguimiento, agenda y medición.",
+    "description": "Sistema de captación de pacientes para consultorios privados de alto valor: publicidad, seguimiento, agenda y medición.",
     "areaServed": "AR",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "AR"
+    },
+    "sameAs": [],
     "contactPoint": {
       "@type": "ContactPoint",
       "telephone": "+54 11 6829 2740",
       "email": "netflow.contacto@gmail.com",
       "contactType": "sales",
       "availableLanguage": "Spanish"
+    }
+  }
+  </script>
+
+  <!-- WebSite: declara el idioma del sitio y lo vincula con la Organization -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "NetFlow",
+    "url": "https://www.netflow.com.ar/",
+    "inLanguage": "es-AR",
+    "description": "Sistema de captación de pacientes para consultorios privados: publicidad, seguimiento, agenda y medición.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "NetFlow",
+      "url": "https://www.netflow.com.ar/"
     }
   }
   </script>
@@ -133,7 +168,7 @@
   <header class="site-header">
     <nav class="navbar" aria-label="Navegación principal">
       <a href="#" class="navbar__brand" title="Volver al inicio - NetFlow">
-        <img src="assets/logo-netflow.png" alt="NetFlow - Sistema de Adquisición de Pacientes" title="Volver al inicio - NetFlow" class="navbar__logo" width="72" height="72" decoding="async">
+        <img src="assets/logo-netflow.png" alt="NetFlow, sistema de captación de pacientes para consultorios privados" title="Volver al inicio - NetFlow" class="navbar__logo" width="72" height="72" decoding="async" fetchpriority="high">
       </a>
       <a
         href="https://wa.me/541168292740"
@@ -154,7 +189,7 @@
           Llená la agenda de tu consultorio privado con pacientes que reservan y asisten.
         </h1>
         <p class="hero__subtitle">
-          Publicidad, seguimiento, agenda y medición funcionando como un sistema único, diseñado para especialistas de alto valor.
+          Un sistema de captación de pacientes que integra publicidad, seguimiento, agenda y medición, diseñado para consultorios privados de alto valor.
         </p>
         <div class="hero__actions">
           <a href="#diagnostico" class="btn btn--primary" data-action="agendar-diagnostico">
@@ -177,7 +212,7 @@
     <section class="problem" id="problema">
       <div class="container">
         <h2 class="problem__title">
-          Pagás publicidad, llegan consultas, y la agenda sigue sin llenarse.
+          Pagás publicidad, llegan consultas, y la agenda de tu consultorio sigue sin llenarse.
         </h2>
 
         <div class="problem__grid">
@@ -204,7 +239,7 @@
         </div>
 
         <p class="problem__highlight">
-          Generar consultas es la parte fácil. Convertirlas en pacientes es el problema real, y ahí es donde entra NetFlow.
+          Generar consultas es la parte fácil. Convertirlas en pacientes sentados en tu consultorio es el problema real: ahí es donde entra NetFlow, con la captación resuelta de punta a punta.
         </p>
       </div>
     </section>
@@ -214,7 +249,7 @@
       <div class="container">
         <h2 class="system__title">El sistema NetFlow</h2>
         <p class="system__subtitle">
-          Un loop continuo: cada paciente agendado deja datos que mejoran el paso siguiente.
+          Un loop continuo de captación: cada paciente que entra a la agenda deja datos que mejoran el paso siguiente.
         </p>
 
         <ol class="system__grid">
@@ -260,37 +295,37 @@
     <!-- SECCIÓN 4: QUÉ HACEMOS — capacidades en filas horizontales, sin cards ni logos -->
     <section class="capabilities" id="capacidades">
       <div class="container">
-        <h2 class="capabilities__title">Capacidades de NetFlow</h2>
+        <h2 class="capabilities__title">Capacidades de NetFlow para la captación de pacientes</h2>
 
         <ul class="capabilities__list">
           <li class="capability-row">
             <h3 class="capability-row__title">Paid Media</h3>
             <p class="capability-row__text">
-              Meta Ads, estrategia, segmentación, creativos, formularios, optimización.
+              Meta Ads, estrategia, segmentación, creativos, formularios y optimización para atraer pacientes a tu consultorio.
             </p>
           </li>
           <li class="capability-row">
             <h3 class="capability-row__title">Conversión</h3>
             <p class="capability-row__text">
-              Setter, seguimiento, calificación, recuperación de leads, agenda.
+              Setter, seguimiento, calificación, recuperación de leads y turnos confirmados en la agenda.
             </p>
           </li>
           <li class="capability-row">
             <h3 class="capability-row__title">Automatización</h3>
             <p class="capability-row__text">
-              ManyChat, WhatsApp, flujos automáticos, follow-ups, CRM/pipeline.
+              ManyChat, WhatsApp, flujos automáticos, follow-ups y CRM/pipeline para que ningún paciente quede sin respuesta.
             </p>
           </li>
           <li class="capability-row">
             <h3 class="capability-row__title">Desarrollo</h3>
             <p class="capability-row__text">
-              Landing pages, integraciones, optimización de conversión.
+              Landing pages, integraciones y optimización de conversión pensadas para la captación.
             </p>
           </li>
           <li class="capability-row">
             <h3 class="capability-row__title">Medición</h3>
             <p class="capability-row__text">
-              Leads, leads calificados, turnos, asistencia, pacientes, reporting.
+              Leads, leads calificados, turnos, asistencia, pacientes y reporting de toda la captación.
             </p>
           </li>
         </ul>
@@ -301,10 +336,10 @@
     <section class="icp" id="para-quien">
       <div class="container">
         <h2 class="icp__title">
-          NetFlow es para especialistas y centros privados que están listos para escalar.
+          NetFlow es para consultorios y centros privados listos para escalar la captación de pacientes.
         </h2>
         <p class="icp__text">
-          Trabajamos con profesionales, clínicas y centros privados con atención particular, capacidad de incorporar pacientes nuevos y decisión de invertir en construir un sistema de adquisición serio.
+          Trabajamos con profesionales, clínicas y consultorios privados con atención particular, capacidad de incorporar pacientes nuevos y decisión de invertir en un sistema de captación serio que sostenga la agenda todos los meses.
         </p>
 
         <!-- Aviso de inversión: filtra leads antes de que lleguen al CTA -->
@@ -409,12 +444,13 @@
          retirar Casos y Resultados (Planes y Diferenciador son ambos oscuros).
          ATENCIÓN: los 3 testimonios son CONTENIDO DE MUESTRA. Reemplazar por reseñas
          reales, con nombre y autorización escrita del profesional, antes de publicar. -->
-    <section class="testimonials section-padding" id="reseñas">
+    <section class="testimonials section-padding" id="resenas">
       <div class="container">
         <h2 class="testimonials__title">Lo que dicen los profesionales que trabajan con NetFlow</h2>
         <p class="testimonials__subtitle">
-          Directores médicos y responsables de clínicas que dejaron de medir la publicidad
-          en clics y empezaron a medirla en pacientes que reservan, asisten y vuelven.
+          Directores médicos y responsables de consultorios privados que dejaron de medir la
+          publicidad en clics y empezaron a medirla en pacientes que llenan la agenda,
+          asisten y vuelven.
         </p>
 
         <!-- La estrella se define una sola vez y se reutiliza en cada puntuación -->
@@ -447,7 +483,7 @@
                 <img
                   class="testimonial-card__avatar"
                   src="https://ui-avatars.com/api/?name=Lucia+Moretti&amp;size=112&amp;background=0052ff&amp;color=ffffff&amp;bold=true&amp;font-size=0.38"
-                  alt=""
+                  alt="Dra. Lucía Moretti, directora médica del Instituto Aurea en Rosario"
                   width="56"
                   height="56"
                   loading="lazy"
@@ -483,7 +519,7 @@
                 <img
                   class="testimonial-card__avatar"
                   src="https://ui-avatars.com/api/?name=Martin+Aguirre&amp;size=112&amp;background=0052ff&amp;color=ffffff&amp;bold=true&amp;font-size=0.38"
-                  alt=""
+                  alt="Dr. Martín Aguirre, cirujano plástico con consultorio propio en Palermo, CABA"
                   width="56"
                   height="56"
                   loading="lazy"
@@ -519,7 +555,7 @@
                 <img
                   class="testimonial-card__avatar"
                   src="https://ui-avatars.com/api/?name=Sofia+Bentancur&amp;size=112&amp;background=0052ff&amp;color=ffffff&amp;bold=true&amp;font-size=0.38"
-                  alt=""
+                  alt="Sofía Bentancur, administradora de la Clínica Dental Nova en Córdoba"
                   width="56"
                   height="56"
                   loading="lazy"
@@ -683,7 +719,7 @@
             ¿Tu sistema está preparado para convertir más demanda en pacientes?
           </h2>
           <p class="final-cta__text">
-            Analizamos tu situación actual y evaluamos si NetFlow puede ayudarte a crecer. Sin costo, sin compromiso.
+            Analizamos cómo captás pacientes hoy y evaluamos si NetFlow puede llenar la agenda de tu consultorio privado. Sin costo, sin compromiso.
           </p>
         </div>
 
@@ -808,8 +844,8 @@
   <footer class="site-footer">
     <div class="container site-footer__inner">
       <div class="site-footer__brand">
-        <img src="assets/logo-netflow.png" alt="NetFlow - Sistema de Adquisición de Pacientes" class="site-footer__logo" width="48" height="48" loading="lazy" decoding="async">
-        <p class="site-footer__claim">Sistema de captación y agenda para consultorios privados.</p>
+        <img src="assets/logo-netflow.png" alt="Logo de NetFlow, captación de pacientes para consultorios privados" class="site-footer__logo" width="48" height="48" loading="lazy" decoding="async">
+        <p class="site-footer__claim">Captación de pacientes y agenda llena para consultorios privados.</p>
       </div>
 
       <ul class="site-footer__contact">
@@ -831,6 +867,6 @@
     </p>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
