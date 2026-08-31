@@ -310,7 +310,7 @@
         <!-- Aviso de inversión: filtra leads antes de que lleguen al CTA -->
         <div class="icp__investment">
           <p>
-            Nuestros clientes suelen invertir entre <strong>$500.000 y $1.500.000</strong> mensuales en NetFlow, además de la pauta publicitaria. Si estás explorando o buscás algo puntual, probablemente todavía no seamos el mejor fit.
+            Nuestros clientes suelen invertir entre <strong>$750.000 y $1.500.000</strong> mensuales en NetFlow, además de la pauta publicitaria. Si estás explorando o buscás algo puntual, probablemente todavía no seamos el mejor fit.
           </p>
         </div>
 
@@ -400,8 +400,142 @@
       </div>
     </section>
 
-    <!-- SECCIÓN 7 (CASOS Y RESULTADOS): retirada hasta tener métricas reales de clientes.
+    <!-- NOTA — CASOS Y RESULTADOS: retirada hasta tener métricas reales de clientes.
          Recuperable desde el historial de git (commit 70839c7). -->
+
+    <!-- SECCIÓN 7: RESEÑAS — prueba social justo después de Planes, para sostener
+         el precio antes de que el usuario compare en Diferenciador.
+         Fondo claro a propósito: devuelve el corte de contraste que se perdió al
+         retirar Casos y Resultados (Planes y Diferenciador son ambos oscuros).
+         ATENCIÓN: los 3 testimonios son CONTENIDO DE MUESTRA. Reemplazar por reseñas
+         reales, con nombre y autorización escrita del profesional, antes de publicar. -->
+    <section class="testimonials section-padding" id="reseñas">
+      <div class="container">
+        <h2 class="testimonials__title">Lo que dicen los profesionales que trabajan con NetFlow</h2>
+        <p class="testimonials__subtitle">
+          Directores médicos y responsables de clínicas que dejaron de medir la publicidad
+          en clics y empezaron a medirla en pacientes que reservan, asisten y vuelven.
+        </p>
+
+        <!-- La estrella se define una sola vez y se reutiliza en cada puntuación -->
+        <svg class="testimonials__sprite" aria-hidden="true" focusable="false">
+          <symbol id="icon-estrella" viewBox="0 0 24 24">
+            <path d="M12 2.4l2.94 5.96 6.58.96-4.76 4.64 1.12 6.55L12 17.4l-5.88 3.1 1.12-6.55L2.48 9.32l6.58-.96L12 2.4z"/>
+          </symbol>
+        </svg>
+
+        <ul class="testimonials__grid">
+          <!-- Reseña 1: dolor = consultas que se perdían en el chat -->
+          <li>
+            <figure class="testimonial-card">
+              <div class="testimonial-card__rating" role="img" aria-label="Puntuación: 5 de 5 estrellas">
+                <svg class="testimonial-card__star" aria-hidden="true" focusable="false"><use href="#icon-estrella"></use></svg>
+                <svg class="testimonial-card__star" aria-hidden="true" focusable="false"><use href="#icon-estrella"></use></svg>
+                <svg class="testimonial-card__star" aria-hidden="true" focusable="false"><use href="#icon-estrella"></use></svg>
+                <svg class="testimonial-card__star" aria-hidden="true" focusable="false"><use href="#icon-estrella"></use></svg>
+                <svg class="testimonial-card__star" aria-hidden="true" focusable="false"><use href="#icon-estrella"></use></svg>
+              </div>
+              <blockquote class="testimonial-card__quote">
+                <p>
+                  Consultas nos llegaban; el problema era que se perdían en el chat. Con NetFlow
+                  el seguimiento quedó automatizado y hoy la paciente llega a la agenda ya
+                  calificada: pasamos de 4 a 11 primeras consultas por semana y las ausencias
+                  se redujeron a la mitad.
+                </p>
+              </blockquote>
+              <figcaption class="testimonial-card__author">
+                <img
+                  class="testimonial-card__avatar"
+                  src="https://ui-avatars.com/api/?name=Lucia+Moretti&amp;size=112&amp;background=0052ff&amp;color=ffffff&amp;bold=true&amp;font-size=0.38"
+                  alt=""
+                  width="56"
+                  height="56"
+                  loading="lazy"
+                  decoding="async"
+                >
+                <div class="testimonial-card__id">
+                  <p class="testimonial-card__name">Dra. Lucía Moretti</p>
+                  <p class="testimonial-card__role">Directora médica · Medicina estética</p>
+                  <p class="testimonial-card__place">Instituto Aurea — Rosario</p>
+                </div>
+              </figcaption>
+            </figure>
+          </li>
+
+          <!-- Reseña 2: dolor = métricas de agencia que no se traducían en facturación -->
+          <li>
+            <figure class="testimonial-card">
+              <div class="testimonial-card__rating" role="img" aria-label="Puntuación: 5 de 5 estrellas">
+                <svg class="testimonial-card__star" aria-hidden="true" focusable="false"><use href="#icon-estrella"></use></svg>
+                <svg class="testimonial-card__star" aria-hidden="true" focusable="false"><use href="#icon-estrella"></use></svg>
+                <svg class="testimonial-card__star" aria-hidden="true" focusable="false"><use href="#icon-estrella"></use></svg>
+                <svg class="testimonial-card__star" aria-hidden="true" focusable="false"><use href="#icon-estrella"></use></svg>
+                <svg class="testimonial-card__star" aria-hidden="true" focusable="false"><use href="#icon-estrella"></use></svg>
+              </div>
+              <blockquote class="testimonial-card__quote">
+                <p>
+                  Lo que más valoro es el reporte. Sé cuánto invertí, cuántos turnos se agendaron
+                  y cuántos pacientes terminaron operándose. Recuperé la inversión del primer mes
+                  antes de la cuarta semana y dejé de discutir métricas que no significaban nada.
+                </p>
+              </blockquote>
+              <figcaption class="testimonial-card__author">
+                <img
+                  class="testimonial-card__avatar"
+                  src="https://ui-avatars.com/api/?name=Martin+Aguirre&amp;size=112&amp;background=0052ff&amp;color=ffffff&amp;bold=true&amp;font-size=0.38"
+                  alt=""
+                  width="56"
+                  height="56"
+                  loading="lazy"
+                  decoding="async"
+                >
+                <div class="testimonial-card__id">
+                  <p class="testimonial-card__name">Dr. Martín Aguirre</p>
+                  <p class="testimonial-card__role">Cirujano plástico · Consultorio propio</p>
+                  <p class="testimonial-card__place">Palermo — CABA</p>
+                </div>
+              </figcaption>
+            </figure>
+          </li>
+
+          <!-- Reseña 3: dolor = carga operativa de la secretaría -->
+          <li>
+            <figure class="testimonial-card">
+              <div class="testimonial-card__rating" role="img" aria-label="Puntuación: 5 de 5 estrellas">
+                <svg class="testimonial-card__star" aria-hidden="true" focusable="false"><use href="#icon-estrella"></use></svg>
+                <svg class="testimonial-card__star" aria-hidden="true" focusable="false"><use href="#icon-estrella"></use></svg>
+                <svg class="testimonial-card__star" aria-hidden="true" focusable="false"><use href="#icon-estrella"></use></svg>
+                <svg class="testimonial-card__star" aria-hidden="true" focusable="false"><use href="#icon-estrella"></use></svg>
+                <svg class="testimonial-card__star" aria-hidden="true" focusable="false"><use href="#icon-estrella"></use></svg>
+              </div>
+              <blockquote class="testimonial-card__quote">
+                <p>
+                  Nuestra secretaria perdía la mañana entera respondiendo los mismos mensajes.
+                  Ahora el sistema filtra, responde y agenda, y ella sólo confirma. Recuperamos
+                  unas 12 horas por semana y ninguna consulta se queda sin respuesta.
+                </p>
+              </blockquote>
+              <figcaption class="testimonial-card__author">
+                <img
+                  class="testimonial-card__avatar"
+                  src="https://ui-avatars.com/api/?name=Sofia+Bentancur&amp;size=112&amp;background=0052ff&amp;color=ffffff&amp;bold=true&amp;font-size=0.38"
+                  alt=""
+                  width="56"
+                  height="56"
+                  loading="lazy"
+                  decoding="async"
+                >
+                <div class="testimonial-card__id">
+                  <p class="testimonial-card__name">Sofía Bentancur</p>
+                  <p class="testimonial-card__role">Administradora · Clínica odontológica</p>
+                  <p class="testimonial-card__place">Clínica Dental Nova — Córdoba</p>
+                </div>
+              </figcaption>
+            </figure>
+          </li>
+        </ul>
+      </div>
+    </section>
 
     <!-- SECCIÓN 8: DIFERENCIADOR — comparación en 2 columnas (dónde termina cada uno) -->
     <section class="differentiator" id="diferenciador">

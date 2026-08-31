@@ -8,9 +8,22 @@
    ========================================================================== */
 
 /**
- * Endpoint que recibe los leads (Formspree, Make, n8n, tu propia API...).
- * Mientras esté vacío el lead NO se pierde: el formulario deriva los datos
- * a WhatsApp ya cargados para que la conversación arranque igual.
+ * Endpoint que recibe los leads. VACÍO = modo WhatsApp (el actual): el envío
+ * abre el chat con los datos ya redactados y no se guarda nada del lado nuestro.
+ *
+ * PARA CONECTARLO MÁS ADELANTE: pegar acá la URL y listo, no hay que tocar
+ * ninguna otra línea del archivo. El POST ya está escrito en sendLead().
+ *   Formspree → 'https://formspree.io/f/TU_ID'
+ *   Make/n8n  → URL del webhook
+ * Se envía POST con JSON plano: { especialidad, ciudad, tratamiento,
+ * particulares, pacientes_adicionales, inversion, nombre, whatsapp, email }.
+ *
+ * Tres cosas a verificar el día que se conecte:
+ *   1. El endpoint debe permitir CORS desde el dominio del sitio, o el fetch falla.
+ *   2. La URL queda visible en este archivo: nunca poner acá una API key.
+ *      Si el servicio pide autenticación, va detrás de un webhook intermedio.
+ *   3. HubSpot necesita otro formato ({ fields: [{ name, value }] }): en ese caso
+ *      hay que transformar el payload dentro de sendLead(), no acá.
  */
 const FORM_ENDPOINT = '';
 
@@ -123,6 +136,9 @@ function initQualifyForm() {
   // Títulos por paso, para el indicador de progreso
   const stepLabels = ['Tu práctica', 'Tu situación comercial', 'Tus datos de contacto'];
   let currentStep = 0;
+
+  // Bloque de recuperación de WhatsApp: se crea solo si el pop-up se bloquea
+  let whatsappFallback = null;
 
   /** Muestra el paso indicado y sincroniza progreso y botones. */
   function renderStep(index) {
@@ -241,22 +257,22 @@ function initQualifyForm() {
     }
 
     const payload = Object.fromEntries(new FormData(form).entries());
+    hideAlerts();
+
+    // MODO WHATSAPP (FORM_ENDPOINT vacío, el actual). Se resuelve sin await:
+    // window.open tiene que correr dentro del gesto del usuario o el bloqueador
+    // de pop-ups lo frena.
+    if (!FORM_ENDPOINT) {
+      openWhatsapp(buildWhatsappUrl(payload));
+      return;
+    }
+
+    // MODO ENDPOINT. Se activa solo con cargar la URL en FORM_ENDPOINT.
     setSubmitting(true);
 
     try {
-      if (FORM_ENDPOINT) {
-        const response = await fetch(FORM_ENDPOINT, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        if (!response.ok) throw new Error(`El endpoint respondió ${response.status}`);
-      } else {
-        // window.open va antes de cualquier await: así sigue contando como
-        // gesto del usuario y el bloqueador de pop-ups no lo frena.
-        window.open(buildWhatsappUrl(payload), '_blank', 'noopener');
-      }
-      showSuccess(!FORM_ENDPOINT);
+      await sendLead(payload);
+      showSuccess(false);
     } catch (error) {
       console.error('[NetFlow] Falló el envío del lead:', error);
       setSubmitting(false);
@@ -265,9 +281,83 @@ function initQualifyForm() {
     }
   });
 
+  /**
+   * Deriva el lead a WhatsApp. Si el navegador bloquea la ventana —Safari/iOS
+   * y varios bloqueadores lo hacen— NO damos el envío por hecho: antes se
+   * mostraba "listo" sin que se hubiera abierto nada y el usuario se iba
+   * creyendo que nos había escrito. Ahora ofrecemos el botón de apertura
+   * manual, cuyo click sí cuenta como gesto directo y nunca se bloquea.
+   */
+  function openWhatsapp(url) {
+    const popup = window.open(url, '_blank', 'noopener');
+
+    // Un pop-up bloqueado devuelve null; algunos bloqueadores devuelven en
+    // cambio una ventana que ya nace cerrada o sin la propiedad `closed`.
+    const isBlocked = !popup || popup.closed || typeof popup.closed === 'undefined';
+
+    if (isBlocked) {
+      showWhatsappFallback(url);
+      return;
+    }
+
+    showSuccess(true);
+  }
+
+  /**
+   * Muestra el aviso + botón para abrir WhatsApp a mano. El bloque se crea una
+   * sola vez y se reutiliza; el formulario queda visible para poder reintentar.
+   */
+  function showWhatsappFallback(url) {
+    if (!whatsappFallback) whatsappFallback = buildFallbackBox();
+
+    whatsappFallback.link.href = url;
+    whatsappFallback.box.hidden = false;
+    if (status) status.textContent = 'Falta un paso: abrí WhatsApp para enviarnos el mensaje';
+
+    // El foco lleva al usuario directo a la acción que le queda pendiente.
+    whatsappFallback.link.focus();
+  }
+
+  /** Arma el bloque de recuperación reutilizando los estilos ya existentes. */
+  function buildFallbackBox() {
+    const box = document.createElement('div');
+    box.className = 'qform__error';
+    box.id = 'qform-whatsapp-fallback';
+    box.setAttribute('role', 'alert');
+    box.hidden = true;
+
+    // <span>, no <p>: la regla global de <p> pisaría el tamaño de .qform__error
+    const text = document.createElement('span');
+    text.style.display = 'block';
+    text.textContent = 'Tu navegador bloqueó la ventana de WhatsApp, así que el mensaje todavía no salió. Abrilo con este botón: tus datos ya están cargados.';
+
+    const link = document.createElement('a');
+    link.className = 'btn btn--primary';
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.textContent = 'Abrir WhatsApp';
+    // Estilos inline: son los dos únicos ajustes de layout que necesita este
+    // nodo y así el arreglo no obliga a tocar styles.css.
+    link.style.display = 'inline-flex';
+    link.style.marginTop = '0.9rem';
+    // Recién acá el envío se da por hecho: el click abre la ventana sí o sí.
+    link.addEventListener('click', () => showSuccess(true));
+
+    box.append(text, link);
+    form.append(box);
+
+    return { box, link };
+  }
+
+  /** Oculta los avisos de intentos anteriores antes de un nuevo envío. */
+  function hideAlerts() {
+    if (errorBox) errorBox.hidden = true;
+    if (whatsappFallback) whatsappFallback.box.hidden = true;
+  }
+
   /** Bloquea el botón mientras se envía, para evitar leads duplicados. */
   function setSubmitting(isSubmitting) {
-    if (errorBox) errorBox.hidden = true;
+    hideAlerts();
     btnSubmit.disabled = isSubmitting;
     btnSubmit.textContent = isSubmitting ? 'Enviando…' : 'Agendar diagnóstico';
   }
@@ -278,6 +368,7 @@ function initQualifyForm() {
    * prometer "recibimos tus datos" sería mentirle.
    */
   function showSuccess(viaWhatsapp) {
+    hideAlerts();
     steps.forEach((step) => step.classList.remove('is-active'));
     const actions = form.querySelector('.qform__actions');
     if (actions) actions.hidden = true;
@@ -290,6 +381,24 @@ function initQualifyForm() {
   }
 
   renderStep(currentStep);
+}
+
+/**
+ * Envía el lead al endpoint configurado. Es el ÚNICO lugar que hay que tocar
+ * si el servicio elegido pide otro formato de body (por ejemplo HubSpot);
+ * para Formspree, Make o n8n funciona tal cual está.
+ * Lanza si la respuesta no es 2xx, para que el submit muestre el aviso de fallo.
+ */
+async function sendLead(payload) {
+  const response = await fetch(FORM_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) throw new Error(`El endpoint respondió ${response.status}`);
+
+  return response;
 }
 
 /**
