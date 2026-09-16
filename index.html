@@ -664,8 +664,10 @@
     <!-- ======================================================================
          SECCIÓN 6: TESTIMONIOS — prueba social ANTES de los planes, para que el
          precio se lea con el respaldo ya instalado.
-         Solo reseñas reales de clientes, con nombre y autorización escrita del
-         profesional. Nunca publicar testimonios redactados por nosotros.
+         Carrusel con scroll nativo (swipe en mobile) + flechas controladas por JS.
+         Reseñas: solo clientes reales, con nombre y autorización escrita.
+         Tarjetas de especialidad: describen la operativa, no llevan firma ni badge
+         de cliente, para no presentarse como testimonios.
          ====================================================================== -->
     <section class="testimonials section-padding" id="resenas">
       <div class="container">
@@ -676,81 +678,157 @@
           y empezaron a trabajar la captación de pacientes con un sistema medible.
         </p>
 
-        <ul class="testimonials__grid">
-          <!-- Reseña 1 -->
-          <li>
-            <figure class="testimonial-card">
-              <p class="testimonial-card__badge">Cliente NetFlow</p>
-              <blockquote class="testimonial-card__quote">
-                <p>
-                  Con NetFlow pudimos ordenar mucho mejor la forma en la que llegan las consultas y
-                  trabajar con una estrategia más clara para captar nuevos pacientes. Lo que más valoro
-                  es poder entender qué estamos haciendo, medirlo y tener un equipo acompañando el proceso.
-                </p>
-              </blockquote>
-              <figcaption class="testimonial-card__author">
-                <!-- data-initials: fallback visible si la foto no carga -->
-                <span class="testimonial-card__avatar" data-initials="EP">
-                  <img src="assets/testimonios/elina-puertas.png" alt="Lic. Eliana Puertas" width="60" height="60" loading="lazy" decoding="async">
-                </span>
-                <span class="testimonial-card__id">
-                  <span class="testimonial-card__name">Lic. Eliana Puertas</span>
-                  <span class="testimonial-card__role">Nutricionista</span>
-                </span>
-              </figcaption>
-            </figure>
-          </li>
+        <div class="testimonials-slider" role="region" aria-roledescription="carrusel" aria-label="Testimonios y especialidades">
+          <!-- tabindex: el track es desplazable, así también se recorre con las flechas del teclado -->
+          <ul class="testimonials-slider-track" id="testimonials-track" tabindex="0">
+            <!-- Reseña 1 -->
+            <li class="testimonials-slider__slide">
+              <figure class="testimonial-card">
+                <p class="testimonial-card__badge">Cliente NetFlow</p>
+                <blockquote class="testimonial-card__quote">
+                  <p>
+                    Con NetFlow pudimos ordenar mucho mejor la forma en la que llegan las consultas y
+                    trabajar con una estrategia más clara para captar nuevos pacientes. Lo que más valoro
+                    es poder entender qué estamos haciendo, medirlo y tener un equipo acompañando el proceso.
+                  </p>
+                </blockquote>
+                <figcaption class="testimonial-card__author">
+                  <!-- data-initials: fallback visible si la foto no carga -->
+                  <span class="testimonial-card__avatar" data-initials="EP">
+                    <img src="assets/testimonios/elina-puertas.png" alt="Lic. Eliana Puertas" width="60" height="60" loading="lazy" decoding="async">
+                  </span>
+                  <span class="testimonial-card__id">
+                    <span class="testimonial-card__name">Lic. Eliana Puertas</span>
+                    <span class="testimonial-card__role">Nutricionista</span>
+                  </span>
+                </figcaption>
+              </figure>
+            </li>
 
-          <!-- Reseña 2 -->
-          <li>
-            <figure class="testimonial-card">
-              <p class="testimonial-card__badge">Cliente NetFlow</p>
-              <blockquote class="testimonial-card__quote">
-                <p>
-                  La diferencia está en pasar de depender únicamente de recomendaciones a tener un sistema
-                  pensado para generar nuevas oportunidades de consulta. NetFlow nos permitió trabajar la
-                  captación de pacientes de una manera mucho más organizada y profesional.
-                </p>
-              </blockquote>
-              <figcaption class="testimonial-card__author">
-                <span class="testimonial-card__avatar" data-initials="AN">
-                  <img src="assets/testimonios/alfredo.neme.png" alt="Dr. Alfredo Neme Scheij" width="60" height="60" loading="lazy" decoding="async">
-                </span>
-                <span class="testimonial-card__id">
-                  <span class="testimonial-card__name">Dr. Alfredo Neme Scheij</span>
-                  <span class="testimonial-card__role">Cardiólogo</span>
-                </span>
-              </figcaption>
-            </figure>
-          </li>
+            <!-- Reseña 2 -->
+            <li class="testimonials-slider__slide">
+              <figure class="testimonial-card">
+                <p class="testimonial-card__badge">Cliente NetFlow</p>
+                <blockquote class="testimonial-card__quote">
+                  <p>
+                    La diferencia está en pasar de depender únicamente de recomendaciones a tener un sistema
+                    pensado para generar nuevas oportunidades de consulta. NetFlow nos permitió trabajar la
+                    captación de pacientes de una manera mucho más organizada y profesional.
+                  </p>
+                </blockquote>
+                <figcaption class="testimonial-card__author">
+                  <span class="testimonial-card__avatar" data-initials="AN">
+                    <img src="assets/testimonios/alfredo.neme.png" alt="Dr. Alfredo Neme Scheij" width="60" height="60" loading="lazy" decoding="async">
+                  </span>
+                  <span class="testimonial-card__id">
+                    <span class="testimonial-card__name">Dr. Alfredo Neme Scheij</span>
+                    <span class="testimonial-card__role">Cardiólogo</span>
+                  </span>
+                </figcaption>
+              </figure>
+            </li>
 
-          <!-- Reseña 3 -->
-          <li>
-            <figure class="testimonial-card">
-              <p class="testimonial-card__badge">Cliente NetFlow</p>
-              <blockquote class="testimonial-card__quote">
-                <p>
-                  Con NetFlow empezamos a trabajar la adquisición de pacientes con mayor estructura y
-                  seguimiento. Tener una estrategia definida y poder analizar los resultados nos permitió
-                  entender mucho mejor qué acciones realmente generan consultas.
-                </p>
-              </blockquote>
-              <figcaption class="testimonial-card__author">
-                <span class="testimonial-card__avatar" data-initials="CS">
-                  <img src="assets/testimonios/cesar-sotelo.png" alt="Dr. César Sotelo" width="60" height="60" loading="lazy" decoding="async">
-                </span>
-                <span class="testimonial-card__id">
-                  <span class="testimonial-card__name">Dr. César Sotelo</span>
-                  <span class="testimonial-card__role">Dermatólogo</span>
-                </span>
-              </figcaption>
-            </figure>
-          </li>
+            <!-- Reseña 3 -->
+            <li class="testimonials-slider__slide">
+              <figure class="testimonial-card">
+                <p class="testimonial-card__badge">Cliente NetFlow</p>
+                <blockquote class="testimonial-card__quote">
+                  <p>
+                    Con NetFlow empezamos a trabajar la adquisición de pacientes con mayor estructura y
+                    seguimiento. Tener una estrategia definida y poder analizar los resultados nos permitió
+                    entender mucho mejor qué acciones realmente generan consultas.
+                  </p>
+                </blockquote>
+                <figcaption class="testimonial-card__author">
+                  <span class="testimonial-card__avatar" data-initials="CS">
+                    <img src="assets/testimonios/cesar-sotelo.png" alt="Dr. César Sotelo" width="60" height="60" loading="lazy" decoding="async">
+                  </span>
+                  <span class="testimonial-card__id">
+                    <span class="testimonial-card__name">Dr. César Sotelo</span>
+                    <span class="testimonial-card__role">Dermatólogo</span>
+                  </span>
+                </figcaption>
+              </figure>
+            </li>
 
-          <!-- REEMPLAZAR: para sumar reseñas 4 a 6, duplicar un <li> completo con el
-               testimonio textual de un cliente real, su foto propia y autorización
-               escrita. La grilla ya pasa a 3 columnas x 2 filas sin tocar el CSS. -->
-        </ul>
+            <!-- Especialidad 1. REEMPLAZAR por la reseña de un cliente real de la
+                 especialidad cuando esté disponible (duplicar el marcado de una reseña). -->
+            <li class="testimonials-slider__slide">
+              <article class="testimonial-card testimonial-card--specialty">
+                <p class="testimonial-card__badge testimonial-card__badge--neutral">Cómo trabajamos</p>
+                <h3 class="testimonial-card__heading">Medicina estética</h3>
+                <p class="testimonial-card__text">
+                  La consulta estética llega con muchas preguntas antes del turno: precio, duración,
+                  recuperación. Ordenamos esas respuestas para que cada interesado reciba información
+                  clara y rápida, y hacemos seguimiento hasta que decide si reserva la evaluación.
+                </p>
+                <div class="testimonial-card__author">
+                  <span class="testimonial-card__avatar testimonial-card__avatar--icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/></svg>
+                  </span>
+                  <span class="testimonial-card__id">
+                    <span class="testimonial-card__name">Evaluación y tratamientos</span>
+                    <span class="testimonial-card__role">Medicina estética</span>
+                  </span>
+                </div>
+              </article>
+            </li>
+
+            <!-- Especialidad 2. REEMPLAZAR por reseña real cuando esté disponible. -->
+            <li class="testimonials-slider__slide">
+              <article class="testimonial-card testimonial-card--specialty">
+                <p class="testimonial-card__badge testimonial-card__badge--neutral">Cómo trabajamos</p>
+                <h3 class="testimonial-card__heading">Odontología premium</h3>
+                <p class="testimonial-card__text">
+                  En implantes, ortodoncia o rehabilitación el paciente compara y se toma su tiempo.
+                  Registramos cada consulta, sostenemos el contacto durante esa decisión y confirmamos
+                  la primera visita para reducir los turnos que quedan vacíos en la agenda.
+                </p>
+                <div class="testimonial-card__author">
+                  <span class="testimonial-card__avatar testimonial-card__avatar--icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false"><path d="M12 5c-1.5-1.3-4-1.8-5.6-.6C4.6 5.8 4.8 8.6 5.6 11c.7 2.1 1 4.4 1.3 6.6.2 1.4 1.9 1.8 2.5.5L11 14.5c.4-.9 1.6-.9 2 0l1.6 3.6c.6 1.3 2.3.9 2.5-.5.3-2.2.6-4.5 1.3-6.6.8-2.4 1-5.2-.8-6.6C16 3.2 13.5 3.7 12 5z"/></svg>
+                  </span>
+                  <span class="testimonial-card__id">
+                    <span class="testimonial-card__name">Implantes y ortodoncia</span>
+                    <span class="testimonial-card__role">Odontología premium</span>
+                  </span>
+                </div>
+              </article>
+            </li>
+
+            <!-- Especialidad 3. REEMPLAZAR por reseña real cuando esté disponible. -->
+            <li class="testimonials-slider__slide">
+              <article class="testimonial-card testimonial-card--specialty">
+                <p class="testimonial-card__badge testimonial-card__badge--neutral">Cómo trabajamos</p>
+                <h3 class="testimonial-card__heading">Cirugía plástica</h3>
+                <p class="testimonial-card__text">
+                  Entre la primera consulta y la cirugía pueden pasar semanas. Acompañamos ese recorrido
+                  con seguimiento ordenado, confirmación de la consulta presencial y medición de cada etapa,
+                  para saber qué canales traen pacientes que efectivamente llegan al consultorio.
+                </p>
+                <div class="testimonial-card__author">
+                  <span class="testimonial-card__avatar testimonial-card__avatar--icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false"><path d="M10.5 3h3v7.5H21v3h-7.5V21h-3v-7.5H3v-3h7.5V3z"/></svg>
+                  </span>
+                  <span class="testimonial-card__id">
+                    <span class="testimonial-card__name">Consulta y cirugía</span>
+                    <span class="testimonial-card__role">Cirugía plástica</span>
+                  </span>
+                </div>
+              </article>
+            </li>
+          </ul>
+
+          <!-- Flechas: script.js las habilita/deshabilita según la posición del track -->
+          <div class="testimonials-slider__controls">
+            <button class="slider-arrow" type="button" data-slider-prev aria-controls="testimonials-track" aria-label="Ver tarjeta anterior">
+              <span aria-hidden="true">&larr;</span>
+            </button>
+            <button class="slider-arrow" type="button" data-slider-next aria-controls="testimonials-track" aria-label="Ver tarjeta siguiente">
+              <span aria-hidden="true">&rarr;</span>
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 

@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFaqAccordion();
   initQualifyForm();
   initAvatarFallback();
+  initTestimonialsSlider();
   initFooterYear();
 });
 
@@ -485,6 +486,80 @@ function initAvatarFallback() {
 
     img.addEventListener('error', dropImage, { once: true });
   });
+}
+
+/* ==========================================================================
+   TESTIMONIOS — CARRUSEL
+   ========================================================================== */
+
+/**
+ * El desplazamiento es nativo (overflow + scroll-snap en styles.css), así que el
+ * swipe y el trackpad funcionan aunque este script falle. Acá solo se suman las
+ * flechas, que avanzan de a una tarjeta, y su estado habilitado/deshabilitado.
+ */
+function initTestimonialsSlider() {
+  const slider = document.querySelector('.testimonials-slider');
+  if (!slider) return;
+
+  const track = slider.querySelector('.testimonials-slider-track');
+  const btnPrev = slider.querySelector('[data-slider-prev]');
+  const btnNext = slider.querySelector('[data-slider-next]');
+  const controls = slider.querySelector('.testimonials-slider__controls');
+  if (!track || !btnPrev || !btnNext) return;
+
+  // Margen para el redondeo de subpíxeles al llegar a los extremos
+  const EDGE_TOLERANCE = 2;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  /** Distancia de un paso: ancho de una tarjeta + el gap del track. */
+  function getStep() {
+    const slide = track.querySelector('.testimonials-slider__slide');
+    if (!slide) return track.clientWidth;
+    const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+    return slide.getBoundingClientRect().width + gap;
+  }
+
+  /** Sincroniza las flechas con la posición actual del track. */
+  function updateArrows() {
+    const maxScroll = track.scrollWidth - track.clientWidth;
+
+    // Si todas las tarjetas entran en pantalla, las flechas no tienen función
+    if (controls) controls.hidden = maxScroll <= EDGE_TOLERANCE;
+
+    const focused = document.activeElement;
+    btnPrev.disabled = track.scrollLeft <= EDGE_TOLERANCE;
+    btnNext.disabled = track.scrollLeft >= maxScroll - EDGE_TOLERANCE;
+
+    // Un botón deshabilitado pierde el foco: se lo pasa a la otra flecha para
+    // que quien navega con teclado no vuelva al inicio de la página
+    if (focused === btnPrev && btnPrev.disabled && !btnNext.disabled) btnNext.focus();
+    if (focused === btnNext && btnNext.disabled && !btnPrev.disabled) btnPrev.focus();
+  }
+
+  function move(direction) {
+    track.scrollBy({
+      left: direction * getStep(),
+      behavior: reduceMotion.matches ? 'auto' : 'smooth',
+    });
+  }
+
+  btnPrev.addEventListener('click', () => move(-1));
+  btnNext.addEventListener('click', () => move(1));
+
+  // rAF agrupa los eventos de scroll: uno por frame alcanza para las flechas
+  let frame = 0;
+  track.addEventListener('scroll', () => {
+    if (frame) return;
+    frame = requestAnimationFrame(() => {
+      frame = 0;
+      updateArrows();
+    });
+  }, { passive: true });
+
+  // Al rotar el celular o redimensionar cambia cuántas tarjetas entran
+  window.addEventListener('resize', updateArrows, { passive: true });
+
+  updateArrows();
 }
 
 /* ==========================================================================
