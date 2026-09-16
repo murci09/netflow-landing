@@ -9,6 +9,11 @@
   --text-dark: #0f172a;
   --text-light: #f8fafc;
 
+  /* Semáforo del recorrido: rojo = etapa que se corta, verde = etapa cubierta.
+     Ambos elegidos por contraste AA sobre fondo claro. */
+  --danger: #be123c;
+  --success: #047857;
+
   --font-display: 'Sora', sans-serif;
   --font-body: 'Inter', sans-serif;
 
@@ -34,6 +39,15 @@ html {
   scroll-behavior: smooth;
   /* Sin esto, los anclas quedan tapados por el header sticky */
   scroll-padding-top: var(--header-h);
+}
+
+/* [hidden] es el interruptor que usa script.js para mostrar un solo botón por
+   paso. La hoja del navegador lo resuelve con display:none, pero cualquier regla
+   de autor con display explícito —.btn usa inline-flex— le gana por especificidad
+   y los tres botones terminaban dibujándose encima. Esta regla lo devuelve al
+   orden correcto para todo el sitio (panels de FAQ, avisos del form, etc.). */
+[hidden] {
+  display: none !important;
 }
 
 body {
@@ -131,9 +145,25 @@ p {
   padding-inline: 1.25rem;
 }
 
-/* Ritmo vertical estándar de sección: mismo valor que usan Planes y Diferenciador */
+/* Ritmo vertical estándar de sección */
 .section-padding {
   padding: 4rem 0;
+}
+
+/* Volanta de sección: ubica al lector antes del H2, sin robarle jerarquía */
+.section-eyebrow {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 0.85rem;
+}
+
+/* Variante para secciones de fondo oscuro */
+.section-eyebrow--light {
+  color: var(--accent);
 }
 
 /* ==========================================================================
@@ -243,106 +273,307 @@ p {
   background-color: rgba(0, 240, 255, 0.18);
 }
 
+
 /* ==========================================================================
-   7. HERO — visible sin scroll en mobile
+   7. SECCIÓN 1 — HERO
+   Fila superior de 2 columnas (promesa | formulario) y el video centrado
+   debajo, haciendo de transición hacia la sección de Problema.
    ========================================================================== */
 .hero {
-  min-height: calc(100svh - 60px); /* resta la altura aprox. del header */
-  display: flex;
-  align-items: center;
   background:
     radial-gradient(60% 50% at 80% 0%, rgba(0, 82, 255, 0.25), transparent 70%),
     radial-gradient(50% 40% at 10% 100%, rgba(0, 240, 255, 0.12), transparent 70%),
     var(--bg-dark);
-  padding: 2rem 1.25rem;
+  padding: 2.5rem 0 3rem;
 }
 
-.hero__content {
-  max-width: 720px;
-  margin-inline: auto;
-  text-align: left;
+/* Mobile-first: una sola columna. El orden del DOM ya deja titular, subtítulo y
+   video arriba, y el formulario abajo: no hace falta reordenar con grid-row. */
+.hero__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+/* --- Columna A: titular + subtítulo + video + badges --- */
+.hero__copy {
+  /* Medida de lectura acotada; en desktop la limita además el ancho de columna */
+  max-width: 38rem;
+}
+
+/* El H1 global llega a 3.4rem: acá se acota porque convive con el formulario */
+.hero__title {
+  font-size: clamp(1.8rem, 2.6vw + 1rem, 2.6rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  max-width: 20ch;
+  /* Evita líneas huérfanas de una sola palabra en el titular */
+  text-wrap: balance;
 }
 
 .hero__subtitle {
-  margin-top: 1.1rem;
-  color: rgba(248, 250, 252, 0.75);
-  max-width: 56ch;
+  margin-top: 1rem;
+  color: rgba(248, 250, 252, 0.78);
+  font-size: clamp(0.98rem, 0.35vw + 0.9rem, 1.08rem);
+  line-height: 1.6;
+  max-width: 48ch;
 }
 
-.hero__actions {
+/* --- Badges de confianza: pastillas, no lista --- */
+.hero__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.6rem;
+}
+
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid rgba(248, 250, 252, 0.14);
+  border-radius: 999px;
+  background-color: rgba(248, 250, 252, 0.04);
+  font-size: 0.82rem;
+  line-height: 1.3;
+  color: rgba(248, 250, 252, 0.8);
+}
+
+.hero__badge::before {
+  content: "✓";
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* --- Columna B: formulario (ancla #diagnostico) --- */
+.hero__form {
+  /* El header es sticky: sin esto el ancla deja el título del form tapado */
+  scroll-margin-top: calc(var(--header-h) + 1rem);
+}
+
+.hero__form-head {
+  margin-bottom: 1.15rem;
+}
+
+.hero__form-title {
+  font-size: clamp(1.25rem, 1.6vw + 0.9rem, 1.5rem);
+  line-height: 1.2;
+}
+
+.hero__form-text {
+  margin-top: 0.55rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: rgba(248, 250, 252, 0.65);
+}
+
+/* La card del formulario ya no se centra sola: ocupa su columna */
+.hero__form .qform {
+  margin: 0;
+  max-width: none;
+}
+
+/* --- Video explicativo: ocupa el ancho de la columna izquierda --- */
+.hero__video {
+  width: 100%;
+  margin-top: 1.9rem;
+}
+
+/* aspect-ratio mantiene la proporción con o sin iframe adentro */
+.hero__video-frame {
+  position: relative;
+  width: 100%;
+  /* El alto sale del ancho: el marco no puede estirar la columna ni el hero */
+  aspect-ratio: 16 / 9;
+  height: auto;
+  border-radius: calc(var(--radius) + 6px);
+  overflow: hidden;
+  border: 1px solid rgba(248, 250, 252, 0.12);
+  background:
+    linear-gradient(155deg, rgba(0, 82, 255, 0.22), rgba(7, 13, 25, 0.92) 58%),
+    var(--bg-dark);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
+}
+
+/* El día que se cargue el video real, el iframe ocupa el marco sin tocar nada más */
+.hero__video-frame iframe,
+.hero__video-frame video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-placeholder {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
-  margin-top: 1.8rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 1.25rem;
+  text-align: center;
 }
 
-/* A partir de tablet, botones en fila y hero centrado */
-@media (min-width: 640px) {
-  .hero__actions {
-    flex-direction: row;
-  }
+.video-placeholder__play {
+  display: grid;
+  place-items: center;
+  width: 3.75rem;
+  height: 3.75rem;
+  margin-bottom: 0.35rem;
+  border-radius: 50%;
+  background-color: var(--primary);
+  box-shadow: 0 0 0 10px rgba(0, 82, 255, 0.16);
+}
+
+.video-placeholder__play svg {
+  width: 1.7rem;
+  height: 1.7rem;
+  fill: var(--text-light);
+  /* Compensa el peso visual del triángulo dentro del círculo */
+  margin-left: 0.18rem;
+}
+
+.video-placeholder__label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.video-placeholder__text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1rem, 1.4vw + 0.75rem, 1.2rem);
+  color: var(--text-light);
+}
+
+.hero__video-caption {
+  margin-top: 0.8rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: rgba(248, 250, 252, 0.55);
 }
 
 @media (min-width: 768px) {
   .hero {
-    padding: 4rem 2rem;
+    padding: 3rem 0 3.5rem;
+  }
+
+  .hero__video {
+    margin-top: 2.1rem;
+  }
+}
+
+/* Dos columnas: promesa + video a la izquierda, formulario a la derecha.
+   Las proporciones buscan que ambas columnas cierren a alturas parecidas. */
+@media (min-width: 1024px) {
+  .hero {
+    padding: 4rem 0 4.5rem;
+  }
+
+  .hero__grid {
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+    gap: 3.5rem;
+  }
+
+  .hero__copy {
+    max-width: none;
+    /* Alinea ópticamente el titular con la cabecera de la card del formulario */
+    padding-top: 0.5rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .hero__grid {
+    gap: 4rem;
   }
 }
 
 /* ==========================================================================
-   8. SECCIÓN 2 — EL PROBLEMA (fondo claro, contraste con el hero)
+   8. SECCIÓN 2 — EL PROBLEMA (fondo claro: corta con el hero oscuro)
    ========================================================================== */
 .problem {
   background-color: var(--bg-light);
   color: var(--text-dark);
-  padding: 3.5rem 0 4rem;
 }
 
 .problem__title {
   color: var(--text-dark);
-  max-width: 22ch;
-  font-size: clamp(1.6rem, 3.5vw + 1rem, 2.4rem);
+  max-width: 20ch;
+  font-size: clamp(1.7rem, 3.5vw + 1rem, 2.5rem);
 }
 
-/* Grid mobile-first: 1 columna, pasa a 3 desde tablet */
+.problem__lead {
+  margin-top: 1.15rem;
+  max-width: 66ch;
+  color: rgba(15, 23, 42, 0.72);
+}
+
+/* Mobile-first: 1 columna -> 2 en tablet -> 3 en desktop */
 .problem__grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.25rem;
-  margin-top: 2.25rem;
+  gap: 1rem;
+  margin-top: 2.5rem;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 640px) {
+  .problem__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
   .problem__grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
+/* Filo rojo a la izquierda: marca que cada card es un punto de fuga */
 .problem-card {
-  background-color: #f1f5f9;
+  background-color: #f8fafc;
   border: 1px solid rgba(15, 23, 42, 0.08);
+  border-left: 3px solid var(--danger);
   border-radius: var(--radius);
-  padding: 1.5rem;
+  padding: 1.45rem 1.4rem;
   transition: transform var(--transition), box-shadow var(--transition);
 }
 
 .problem-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+}
+
+.problem-card__index {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  color: var(--danger);
+  margin-bottom: 0.55rem;
 }
 
 .problem-card__title {
-  font-size: 1.1rem;
-  margin-bottom: 0.6rem;
-  color: var(--primary);
+  font-size: 1.08rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-dark);
 }
 
 .problem-card__text {
   font-size: 0.95rem;
-  color: rgba(15, 23, 42, 0.75);
+  color: rgba(15, 23, 42, 0.72);
 }
 
-/* Frase de cierre, jerarquía alta para marcar el giro hacia la solución */
+/* Frase de cierre: marca el giro del problema hacia el sistema */
 .problem__highlight {
   margin-top: 2.5rem;
   padding-top: 2rem;
@@ -355,219 +586,396 @@ p {
 }
 
 /* ==========================================================================
-   9. SECCIÓN 3 — SISTEMA NETFLOW (fondo oscuro, loop de 7 pasos)
+   9. SECCIÓN 3 — CÓMO FUNCIONA (línea de tiempo del paciente, 8 pasos)
    ========================================================================== */
-.system {
+.journey {
   background-color: var(--bg-dark);
-  padding: 4rem 0;
 }
 
-.system__title {
+.journey .section-eyebrow {
   text-align: center;
-  font-size: clamp(1.6rem, 3.5vw + 1rem, 2.4rem);
 }
 
-.system__subtitle {
+.journey__title {
   text-align: center;
+  font-size: clamp(1.7rem, 3.5vw + 1rem, 2.5rem);
+}
+
+.journey__subtitle {
+  text-align: center;
+  max-width: 62ch;
+  margin: 0.9rem auto 0;
   color: rgba(248, 250, 252, 0.65);
-  max-width: 50ch;
-  margin: 0.75rem auto 0;
 }
 
-/* Grid mobile-first: 1 col -> 2 cols en tablet -> 4 cols en desktop
-   (07 queda solo/destacado en su propia fila para reforzar el loop) */
-.system__grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-  margin-top: 2.5rem;
-  list-style: none;
-  counter-reset: none;
-}
-
-@media (min-width: 640px) {
-  .system__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .system__grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-.system-card {
+/* --- Timeline: un único rail continuo, no cards sueltas --- */
+.timeline {
   position: relative;
-  background-color: rgba(248, 250, 252, 0.04);
-  border: 1px solid rgba(248, 250, 252, 0.08);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  transition: transform var(--transition), border-color var(--transition);
+  list-style: none;
+  margin-top: 3rem;
 }
 
-.system-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--accent);
+/* Rail: en mobile corre por la izquierda, alineado al centro de los marcadores */
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 1.1rem;
+  bottom: 1.1rem;
+  left: 1.125rem;
+  width: 2px;
+  background: linear-gradient(180deg, var(--primary), var(--accent));
+  opacity: 0.55;
 }
 
-.system-card__num {
-  display: block;
+.timeline__item {
+  position: relative;
+  padding-left: 3.5rem;
+  padding-bottom: 1.75rem;
+}
+
+.timeline__item:last-child {
+  padding-bottom: 0;
+}
+
+/* El número va sobre el rail: fondo opaco para que el rail no lo cruce */
+.timeline__marker {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background-color: var(--bg-dark);
+  border: 2px solid var(--primary);
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.6rem;
+  font-weight: 700;
+  font-size: 0.95rem;
   color: var(--accent);
-  margin-bottom: 0.5rem;
 }
 
-.system-card__title {
+.timeline__card {
+  background-color: rgba(248, 250, 252, 0.04);
+  border: 1px solid rgba(248, 250, 252, 0.09);
+  border-radius: var(--radius);
+  padding: 1.15rem 1.25rem;
+  transition: border-color var(--transition), transform var(--transition);
+}
+
+.timeline__card:hover {
+  border-color: rgba(0, 240, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.timeline__step-title {
   font-size: 1.05rem;
   margin-bottom: 0.35rem;
 }
 
-.system-card__text {
-  font-size: 0.9rem;
-  color: rgba(248, 250, 252, 0.6);
+.timeline__step-text {
+  font-size: 0.925rem;
+  color: rgba(248, 250, 252, 0.62);
 }
 
-/* Paso 07: se distingue visualmente porque cierra el loop y retroalimenta al 01 */
-.system-card--loop {
-  border-color: var(--primary);
-  background-color: rgba(0, 82, 255, 0.08);
+/* Paso 8: cierra el recorrido y devuelve el dato al paso 1 */
+.timeline__item--close .timeline__marker {
+  border-color: var(--accent);
+  background-color: rgba(0, 240, 255, 0.12);
 }
 
-.system-card--loop .system-card__num {
-  color: var(--primary);
+.timeline__item--close .timeline__card {
+  border-color: rgba(0, 240, 255, 0.32);
+  background-color: rgba(0, 240, 255, 0.05);
 }
 
-/* Flecha de retorno: solo visible en desktop, donde el loop se lee como circuito */
-@media (min-width: 1024px) {
-  .system-card--loop::after {
-    content: "↺ vuelve al paso 01";
-    position: absolute;
-    bottom: -1.6rem;
-    left: 1.5rem;
-    font-size: 0.75rem;
-    color: var(--primary);
-    white-space: nowrap;
+/* Desde desktop el rail pasa al centro y los pasos alternan de lado */
+@media (min-width: 900px) {
+  .timeline::before {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .timeline__item {
+    display: grid;
+    grid-template-columns: 1fr 5rem 1fr;
+    align-items: start;
+    padding-left: 0;
+    padding-bottom: 1.5rem;
+  }
+
+  .timeline__marker {
+    position: static;
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
+  }
+
+  .timeline__card {
+    grid-column: 1;
+    grid-row: 1;
+    text-align: right;
+  }
+
+  .timeline__item:nth-child(even) .timeline__card {
+    grid-column: 3;
+    text-align: left;
   }
 }
 
 /* ==========================================================================
-   10. SECCIÓN 4 — CAPACIDADES (filas horizontales, sin cards)
+   10. SECCIÓN 4 — SIN SISTEMA vs. CON NETFLOW (dos recorridos comparados)
    ========================================================================== */
-.capabilities {
+.compare {
   background-color: var(--bg-light);
   color: var(--text-dark);
-  padding: 4rem 0;
 }
 
-.capabilities__title {
+.compare .section-eyebrow {
+  text-align: center;
+}
+
+.compare__title {
   color: var(--text-dark);
   text-align: center;
-  font-size: clamp(1.6rem, 3.5vw + 1rem, 2.4rem);
-  margin-bottom: 2.5rem;
+  font-size: clamp(1.7rem, 3.5vw + 1rem, 2.5rem);
 }
 
-.capabilities__list {
-  max-width: 800px;
-  margin-inline: auto;
+.compare__subtitle {
+  text-align: center;
+  max-width: 60ch;
+  margin: 0.9rem auto 0;
+  color: rgba(15, 23, 42, 0.7);
 }
 
-/* Cada capacidad es una fila con separador, no una card */
-.capability-row {
+/* Mobile-first: paneles apilados; lado a lado recién cuando entran cómodos */
+.compare__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  margin-top: 2.75rem;
+  align-items: stretch;
+}
+
+@media (min-width: 860px) {
+  .compare__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.75rem;
+  }
+}
+
+.compare-panel {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  padding: 1.4rem 0;
-  border-bottom: 1px solid rgba(15, 23, 42, 0.1);
-  transition: padding-left var(--transition), border-color var(--transition);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: calc(var(--radius) + 4px);
+  padding: 1.75rem 1.5rem;
 }
 
-.capability-row:last-child {
-  border-bottom: none;
+.compare-panel__head {
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
 }
 
-.capability-row:hover {
-  border-color: var(--primary);
-  padding-left: 0.5rem;
+.compare-panel__label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
-.capability-row__title {
-  color: var(--primary);
-  font-size: 1.1rem;
+.compare-panel__title {
+  margin-top: 0.45rem;
+  font-size: 1.2rem;
+  color: var(--text-dark);
 }
 
-.capability-row__text {
-  color: rgba(15, 23, 42, 0.7);
+/* Cadena de etapas: cada paso se conecta con el siguiente vía ::after */
+.compare-panel__chain {
+  list-style: none;
+  margin-top: 1.5rem;
+  flex-grow: 1;
+}
+
+.chain-step {
+  position: relative;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 600;
   font-size: 0.95rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background-color: #f8fafc;
+  color: var(--text-dark);
+  margin-bottom: 1.9rem;
 }
 
-/* Desde tablet: título y descripción en la misma línea */
-@media (min-width: 640px) {
-  .capability-row {
-    flex-direction: row;
-    align-items: baseline;
-    gap: 1.5rem;
-  }
+.chain-step:last-child {
+  margin-bottom: 0;
+}
 
-  .capability-row__title {
-    flex: 0 0 200px;
-  }
+.chain-step:not(:last-child)::after {
+  content: "↓";
+  position: absolute;
+  left: 50%;
+  bottom: -1.6rem;
+  transform: translateX(-50%);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.compare-panel__note {
+  margin-top: 1.5rem;
+  padding-top: 1.15rem;
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+  text-align: center;
+  font-size: 0.9rem;
+  color: rgba(15, 23, 42, 0.65);
+}
+
+/* --- Panel A: el recorrido se corta --- */
+.compare-panel--without {
+  background-color: rgba(190, 18, 60, 0.035);
+  border-color: rgba(190, 18, 60, 0.25);
+}
+
+.compare-panel--without .compare-panel__label {
+  color: var(--danger);
+}
+
+.compare-panel--without .chain-step {
+  border-color: rgba(190, 18, 60, 0.22);
+  background-color: rgba(190, 18, 60, 0.05);
+}
+
+.compare-panel--without .chain-step::after {
+  color: rgba(190, 18, 60, 0.55);
+}
+
+/* Último eslabón: borde punteado, la cadena no sigue */
+.chain-step--dead {
+  border-style: dashed;
+  color: var(--danger);
+  background-color: rgba(190, 18, 60, 0.1) !important;
+}
+
+/* --- Panel B: el recorrido se completa --- */
+.compare-panel--with {
+  background-color: rgba(4, 120, 87, 0.04);
+  border-color: rgba(4, 120, 87, 0.28);
+  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.07);
+}
+
+.compare-panel--with .compare-panel__label {
+  color: var(--success);
+}
+
+.compare-panel--with .chain-step {
+  border-color: rgba(4, 120, 87, 0.22);
+  background-color: rgba(4, 120, 87, 0.06);
+}
+
+.compare-panel--with .chain-step::after {
+  color: rgba(4, 120, 87, 0.6);
+}
+
+.compare-panel--with .compare-panel__note {
+  color: var(--success);
+}
+
+/* "Asistencia": el momento que justifica todo el sistema */
+.chain-step--goal {
+  background-color: var(--success) !important;
+  border-color: var(--success) !important;
+  color: var(--bg-light);
 }
 
 /* ==========================================================================
-   11. SECCIÓN 5 — PARA QUIÉN ES (ICP + inversión + especialidades)
+   11. SECCIÓN 5 — PARA QUIÉN ES (tipos de institución + especialidades)
    ========================================================================== */
 .icp {
-  background-color: var(--bg-light);
+  background-color: #f1f5f9;
   color: var(--text-dark);
-  padding: 4rem 0;
   border-top: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 .icp__title {
   color: var(--text-dark);
   max-width: 26ch;
-  font-size: clamp(1.6rem, 3.5vw + 1rem, 2.2rem);
+  font-size: clamp(1.7rem, 3.5vw + 1rem, 2.3rem);
 }
 
 .icp__text {
   margin-top: 1.1rem;
-  max-width: 65ch;
-  color: rgba(15, 23, 42, 0.75);
+  max-width: 66ch;
+  color: rgba(15, 23, 42, 0.72);
 }
 
-/* Bloque de inversión: filtra al lead, por eso lleva marca visual fuerte */
-.icp__investment {
-  margin-top: 2rem;
-  padding: 1.5rem;
-  background-color: rgba(0, 82, 255, 0.06);
-  border-left: 4px solid var(--primary);
-  border-radius: 0 var(--radius) var(--radius) 0;
+/* Tipos de institución: 1 col -> 2 en tablet -> 4 en desktop */
+.icp__types {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 2.25rem;
 }
 
-.icp__investment p {
+@media (min-width: 640px) {
+  .icp__types {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .icp__types {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.icp-type {
+  background-color: var(--bg-light);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-top: 3px solid var(--primary);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.25rem;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.icp-type:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+}
+
+.icp-type__title {
+  font-size: 1.02rem;
   color: var(--text-dark);
-  font-size: 1rem;
+  margin-bottom: 0.45rem;
 }
 
-.icp__investment strong {
-  color: var(--primary);
+.icp-type__text {
+  font-size: 0.9rem;
+  color: rgba(15, 23, 42, 0.7);
 }
 
-/* Tags de especialidades: mismo peso, sin jerarquía entre sí */
+.icp__tags-title {
+  margin-top: 3rem;
+  font-size: 1.1rem;
+  color: var(--text-dark);
+}
+
+/* Tags de especialidades: mismo peso visual, sin jerarquía entre sí */
 .icp__tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-top: 2.25rem;
+  gap: 0.55rem;
+  margin-top: 1.25rem;
 }
 
 .tag {
   padding: 0.5rem 1rem;
-  background-color: #f1f5f9;
-  border: 1px solid rgba(15, 23, 42, 0.1);
+  background-color: var(--bg-light);
+  border: 1px solid rgba(15, 23, 42, 0.12);
   border-radius: 999px;
   font-size: 0.85rem;
   color: var(--text-dark);
@@ -579,147 +987,17 @@ p {
   color: var(--primary);
 }
 
-/* ==========================================================================
-   12. SECCIÓN 6 — PLANES (3 tarjetas, GOLD destacada)
-   ========================================================================== */
-.pricing {
-  background-color: var(--bg-dark);
-  padding: 4rem 0;
-}
-
-.pricing__title {
-  text-align: center;
-  font-size: clamp(1.6rem, 3.5vw + 1rem, 2.4rem);
-}
-
-/* Nota aclaratoria: visible pero sin competir con el título */
-.pricing__note {
-  text-align: center;
-  color: var(--accent);
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin-top: 0.6rem;
-}
-
-/* Grid mobile-first: 1 columna, 3 desde desktop */
-.pricing__grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-  margin-top: 2.75rem;
-  align-items: start;
-}
-
-@media (min-width: 1024px) {
-  .pricing__grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.price-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  background-color: rgba(248, 250, 252, 0.04);
-  border: 1px solid rgba(248, 250, 252, 0.1);
-  border-radius: var(--radius);
-  padding: 2rem 1.75rem;
-  transition: transform var(--transition), border-color var(--transition);
-}
-
-.price-card:hover {
-  transform: translateY(-4px);
-}
-
-.price-card__name {
-  font-size: 1.3rem;
-}
-
-.price-card__tagline {
-  color: rgba(248, 250, 252, 0.6);
-  font-size: 0.9rem;
-  margin-top: 0.25rem;
-}
-
-.price-card__price {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(1.5rem, 2.5vw + 1rem, 1.9rem);
-  color: var(--text-light);
-  margin-top: 1.25rem;
-}
-
-.price-card__period {
-  font-family: var(--font-body);
-  font-weight: 500;
-  font-size: 0.85rem;
-  color: rgba(248, 250, 252, 0.55);
-}
-
-.price-card__features {
-  margin-top: 1.5rem;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-}
-
-.price-card__features li {
-  font-size: 0.9rem;
-  color: rgba(248, 250, 252, 0.75);
-  padding-left: 1.1rem;
-  position: relative;
-}
-
-/* Check simple con CSS, sin íconos externos */
-.price-card__features li::before {
-  content: "✓";
-  position: absolute;
-  left: 0;
-  color: var(--accent);
-  font-weight: 700;
-}
-
-.price-card__cta {
-  margin-top: 2rem;
-  width: 100%;
-}
-
-/* GOLD: plan recomendado — borde primary, badge y elevación en desktop */
-.price-card--featured {
-  border-color: var(--primary);
+/* Cierre de la lista: deja explícito que el listado no es excluyente */
+.tag--more {
   background-color: rgba(0, 82, 255, 0.08);
-}
-
-@media (min-width: 1024px) {
-  .price-card--featured {
-    transform: scale(1.04);
-  }
-
-  .price-card--featured:hover {
-    transform: scale(1.04) translateY(-4px);
-  }
-}
-
-.price-card__badge {
-  position: absolute;
-  top: -0.75rem;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: var(--primary);
-  color: var(--text-light);
-  font-size: 0.75rem;
+  border-color: rgba(0, 82, 255, 0.35);
+  color: var(--primary);
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 0.35rem 0.9rem;
-  border-radius: 999px;
-  white-space: nowrap;
 }
 
 /* ==========================================================================
-   13. SECCIÓN 7 — RESEÑAS / TESTIMONIOS (fondo claro: corta la racha oscura
-       entre Planes y Diferenciador, y aísla visualmente la prueba social)
+   12. SECCIÓN 6 — RESEÑAS / TESTIMONIOS (prueba social antes de Planes:
+       instala el respaldo justo antes de mostrar el precio)
    ========================================================================== */
 .testimonials {
   background-color: var(--bg-light);
@@ -859,29 +1137,29 @@ p {
 }
 
 /* ==========================================================================
-   14. SECCIÓN 8 — DIFERENCIADOR (fondo oscuro, 2 columnas comparativas)
+   13. SECCIÓN 7 — PLANES (3 tarjetas, GOLD destacada)
    ========================================================================== */
-.differentiator {
+.pricing {
   background-color: var(--bg-dark);
   padding: 4rem 0;
-  /* Ya no lleva borde superior: Reseñas (fondo claro) volvió a dar el corte de
-     contraste que este borde suplía mientras la sección anterior era oscura. */
 }
 
-.differentiator__title {
+.pricing__title {
   text-align: center;
   font-size: clamp(1.6rem, 3.5vw + 1rem, 2.4rem);
 }
 
-.differentiator__subtitle {
+/* Nota aclaratoria: visible pero sin competir con el título */
+.pricing__note {
   text-align: center;
-  max-width: 55ch;
-  margin: 0.85rem auto 0;
-  color: rgba(248, 250, 252, 0.65);
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-top: 0.6rem;
 }
 
-/* Mobile-first: columnas apiladas; desde tablet, lado a lado para comparar */
-.differentiator__grid {
+/* Grid mobile-first: 1 columna, 3 desde desktop */
+.pricing__grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.5rem;
@@ -889,111 +1167,114 @@ p {
   align-items: start;
 }
 
-@media (min-width: 768px) {
-  .differentiator__grid {
-    grid-template-columns: 1fr 1fr;
+@media (min-width: 1024px) {
+  .pricing__grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
-.compare-col {
+.price-card {
+  position: relative;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  background-color: rgba(248, 250, 252, 0.04);
   border: 1px solid rgba(248, 250, 252, 0.1);
   border-radius: var(--radius);
-  padding: 1.75rem;
+  padding: 2rem 1.75rem;
+  transition: transform var(--transition), border-color var(--transition);
 }
 
-.compare-col__title {
-  font-size: 1.2rem;
-  text-align: center;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(248, 250, 252, 0.1);
+.price-card:hover {
+  transform: translateY(-4px);
 }
 
-/* Cadena de pasos: cada item se conecta con el siguiente vía ::after */
-.compare-col__flow {
-  list-style: none;
+.price-card__name {
+  font-size: 1.3rem;
+}
+
+.price-card__tagline {
+  color: rgba(248, 250, 252, 0.6);
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.price-card__price {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 2.5vw + 1rem, 1.9rem);
+  color: var(--text-light);
+  margin-top: 1.25rem;
+}
+
+.price-card__period {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: rgba(248, 250, 252, 0.55);
+}
+
+.price-card__features {
   margin-top: 1.5rem;
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
 }
 
-.flow-step {
+.price-card__features li {
+  font-size: 0.9rem;
+  color: rgba(248, 250, 252, 0.75);
+  padding-left: 1.1rem;
   position: relative;
-  text-align: center;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 0.95rem;
-  padding: 0.7rem 0.9rem;
-  border-radius: var(--radius);
-  background-color: rgba(248, 250, 252, 0.05);
-  border: 1px solid rgba(248, 250, 252, 0.1);
-  margin-bottom: 2rem;
 }
 
-/* Conector vertical entre pasos (no se dibuja después del último) */
-.flow-step:not(:last-child)::after {
-  content: "➔";
+/* Check simple con CSS, sin íconos externos */
+.price-card__features li::before {
+  content: "✓";
   position: absolute;
-  bottom: -1.65rem;
-  left: 50%;
-  transform: translateX(-50%) rotate(90deg);
-  font-size: 0.85rem;
-  color: rgba(248, 250, 252, 0.35);
+  left: 0;
+  color: var(--accent);
+  font-weight: 700;
 }
 
-.flow-step:last-child {
-  margin-bottom: 0;
+.price-card__cta {
+  margin-top: 2rem;
+  width: 100%;
 }
 
-/* Columna "agencia": el flujo se corta en el lead */
-.compare-col--them {
-  background-color: rgba(248, 250, 252, 0.02);
-}
-
-.flow-step--end {
-  border-style: dashed;
-  border-color: rgba(248, 250, 252, 0.3);
-  color: rgba(248, 250, 252, 0.6);
-}
-
-/* Columna "NetFlow": destacada, es la propuesta */
-.compare-col--us {
+/* GOLD: plan recomendado — borde primary, badge y elevación en desktop */
+.price-card--featured {
   border-color: var(--primary);
   background-color: rgba(0, 82, 255, 0.08);
 }
 
-.compare-col--us .flow-step {
-  border-color: rgba(0, 240, 255, 0.25);
-  background-color: rgba(0, 240, 255, 0.05);
+@media (min-width: 1024px) {
+  .price-card--featured {
+    transform: scale(1.04);
+  }
+
+  .price-card--featured:hover {
+    transform: scale(1.04) translateY(-4px);
+  }
 }
 
-.compare-col--us .flow-step:not(:last-child)::after {
-  color: var(--accent);
-}
-
-/* "Paciente": el objetivo real del sistema */
-.flow-step--goal {
-  background-color: var(--primary) !important;
-  border-color: var(--primary) !important;
+.price-card__badge {
+  position: absolute;
+  top: -0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--primary);
   color: var(--text-light);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  white-space: nowrap;
 }
-
-.compare-col__note {
-  margin-top: 1.5rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid rgba(248, 250, 252, 0.1);
-  text-align: center;
-  font-size: 0.9rem;
-  color: rgba(248, 250, 252, 0.6);
-}
-
-.compare-col--us .compare-col__note {
-  color: var(--accent);
-}
-
 /* ==========================================================================
-   15. SECCIÓN 9 — FAQ (acordeón: panel con [hidden], toggle desde JS)
+   14. SECCIÓN 8 — FAQ (acordeón: panel con [hidden], toggle desde JS)
    ========================================================================== */
 .faq {
   background-color: var(--bg-light);
@@ -1097,7 +1378,8 @@ p {
 }
 
 /* ==========================================================================
-   16. SECCIÓN 10 — CTA FINAL + FORMULARIO PROGRESIVO
+   15. SECCIÓN 9 — CTA FINAL (cierre) + FORMULARIO PROGRESIVO
+       El formulario vive en el hero: estos estilos lo sirven desde ahí.
    ========================================================================== */
 .final-cta {
   background-color: var(--bg-dark);
@@ -1120,19 +1402,59 @@ p {
   color: rgba(248, 250, 252, 0.7);
 }
 
-/* Card del formulario */
+/* Botonera de cierre: apilada en mobile, en fila desde tablet */
+.final-cta__actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.85rem;
+  margin-top: 1.9rem;
+}
+
+@media (min-width: 640px) {
+  .final-cta__actions {
+    flex-direction: row;
+  }
+}
+
+/* Tres garantías operativas: bajan la fricción justo antes del clic */
+.final-cta__reassurance {
+  display: grid;
+  gap: 0.6rem;
+  margin: 2.25rem auto 0;
+  max-width: 46ch;
+  text-align: left;
+}
+
+.final-cta__reassurance li {
+  position: relative;
+  padding-left: 1.6rem;
+  font-size: 0.9rem;
+  color: rgba(248, 250, 252, 0.65);
+}
+
+.final-cta__reassurance li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Card del formulario: superficie elevada sobre el fondo del hero */
 .qform {
   max-width: 640px;
   margin: 2.5rem auto 0;
-  background-color: rgba(248, 250, 252, 0.04);
-  border: 1px solid rgba(248, 250, 252, 0.1);
-  border-radius: var(--radius);
-  padding: 1.75rem 1.25rem;
+  background-color: rgba(248, 250, 252, 0.05);
+  border: 1px solid rgba(248, 250, 252, 0.13);
+  border-radius: calc(var(--radius) + 6px);
+  padding: 1.5rem 1.25rem 1.5rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.38);
 }
 
 @media (min-width: 640px) {
   .qform {
-    padding: 2.25rem;
+    padding: 1.9rem;
   }
 }
 
@@ -1159,17 +1481,20 @@ p {
 /* Estado textual del paso: también lo anuncia el lector de pantalla */
 .qform__status {
   text-align: center;
-  margin-top: 0.85rem;
-  font-size: 0.85rem;
+  margin-top: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  color: rgba(248, 250, 252, 0.6);
+  letter-spacing: 0.02em;
+  color: rgba(248, 250, 252, 0.72);
 }
 
 /* Solo el fieldset con .is-active se muestra */
 .qform__step {
   display: none;
   border: none;
-  margin-top: 1.5rem;
+  margin-top: 1.4rem;
+  padding-top: 1.35rem;
+  border-top: 1px solid rgba(248, 250, 252, 0.08);
 }
 
 .qform__step.is-active {
@@ -1179,21 +1504,28 @@ p {
 .qform__legend {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 1.05rem;
+  font-size: 1rem;
   color: var(--text-light);
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.15rem;
 }
 
+/* Separación entre campos. Va por margin y no por gap porque el contenedor es un
+   <fieldset>: convertirlo en flex/grid rompe el posicionamiento de su <legend>. */
 .field {
   margin-bottom: 1.15rem;
 }
 
+.field:last-child {
+  margin-bottom: 0;
+}
+
 .field__label {
   display: block;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 600;
-  color: rgba(248, 250, 252, 0.8);
-  margin-bottom: 0.4rem;
+  letter-spacing: 0.01em;
+  color: rgba(248, 250, 252, 0.85);
+  margin-bottom: 0.45rem;
 }
 
 .field__label span {
@@ -1202,18 +1534,26 @@ p {
 
 .field__input {
   width: 100%;
-  padding: 0.8rem 0.9rem;
+  padding: 0.85rem 1rem;
   font-family: var(--font-body);
   font-size: 1rem; /* 16px evita el zoom automático en iOS */
+  line-height: 1.4;
   color: var(--text-light);
-  background-color: rgba(7, 13, 25, 0.6);
-  border: 1px solid rgba(248, 250, 252, 0.16);
+  background-color: rgba(7, 13, 25, 0.55);
+  border: 1px solid rgba(248, 250, 252, 0.14);
   border-radius: var(--radius);
-  transition: border-color var(--transition), box-shadow var(--transition);
+  transition: border-color var(--transition), box-shadow var(--transition),
+              background-color var(--transition);
+}
+
+/* El hover adelanta cuál es el campo apuntado antes de hacer foco */
+.field__input:hover {
+  border-color: rgba(248, 250, 252, 0.26);
+  background-color: rgba(7, 13, 25, 0.7);
 }
 
 .field__input::placeholder {
-  color: rgba(248, 250, 252, 0.35);
+  color: rgba(248, 250, 252, 0.42);
 }
 
 .field__input:focus {
@@ -1250,8 +1590,9 @@ p {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  border: 1px solid rgba(248, 250, 252, 0.16);
+  padding: 0.85rem 1rem;
+  background-color: rgba(7, 13, 25, 0.55);
+  border: 1px solid rgba(248, 250, 252, 0.14);
   border-radius: var(--radius);
   cursor: pointer;
   font-size: 0.95rem;
@@ -1293,33 +1634,92 @@ p {
   border-color: #ff6b6b;
 }
 
-/* Navegación: mobile en columna, desde tablet en fila */
+/* Navegación entre pasos.
+   Visibilidad por paso: renderStep() en script.js pone [hidden] en el botón que
+   no corresponde, y la regla global [hidden] del reset lo saca del flujo. El
+   resultado es un solo CTA azul por paso —"Continuar" en 1 y 2, "Agendar
+   diagnóstico" en el 3— y "Volver" como acción secundaria discreta.
+   Las tres reglas de abajo dejan esa intención escrita y sirven de red por si
+   alguna vez se agrega un display explícito sobre los botones. */
+.qform__next[hidden],
+.qform__submit[hidden],
+.qform__back[hidden] {
+  display: none !important;
+}
+
+/* Mobile: columna. "Volver" arriba a la izquierda y el primario a todo el ancho,
+   porque en 320px los dos no entran en la misma fila sin desbordar la card. */
 .qform__actions {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  margin-top: 1.75rem;
+  align-items: stretch;
+  gap: 0.9rem;
+  margin-top: 1.5rem;
+  padding-top: 1.35rem;
+  border-top: 1px solid rgba(248, 250, 252, 0.08);
 }
 
-@media (min-width: 640px) {
-  .qform__actions {
-    flex-direction: row;
-    justify-content: flex-end;
-  }
+/* "Volver": botón fantasma, sin borde brillante ni fondo sólido */
+.qform__back {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 0.4rem;
+  flex: 0 0 auto;
+  padding: 0.5rem 0.75rem;
+  margin-left: -0.75rem; /* alinea el texto con el borde de los inputs */
+  background: none;
+  border: 0;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(248, 250, 252, 0.55);
+  transition: color var(--transition), background-color var(--transition);
+}
 
-  .qform__back {
-    margin-right: auto;
-  }
+.qform__back::before {
+  content: "←";
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.qform__back:hover {
+  color: var(--text-light);
+  background-color: rgba(248, 250, 252, 0.06);
+}
+
+.qform__back:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .qform__actions .btn {
   width: 100%;
+  padding-block: 0.85rem;
 }
 
-@media (min-width: 640px) {
+/* Desde 560px entran los dos en una fila: "Volver" a la izquierda, CTA a la
+   derecha. margin-left:auto empuja el CTA contra el borde también en el paso 1,
+   donde "Volver" está oculto y space-between no tiene nada contra qué separar. */
+@media (min-width: 560px) {
+  .qform__actions {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .qform__back {
+    align-self: center;
+    margin-left: -0.75rem;
+  }
+
   .qform__actions .btn {
     width: auto;
-    min-width: 160px;
+    min-width: 11.5rem;
+    margin-left: auto;
   }
 }
 
@@ -1357,7 +1757,7 @@ p {
 }
 
 /* ==========================================================================
-   17. FOOTER — contacto directo + legal
+   16. FOOTER — contacto directo + legal
    ========================================================================== */
 .site-footer {
   background-color: var(--bg-dark);

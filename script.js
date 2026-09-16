@@ -72,7 +72,7 @@ function initHeaderScrollState() {
 }
 
 /* ==========================================================================
-   SECCIÓN 9 — ACORDEÓN DE FAQs
+   SECCIÓN 8 — ACORDEÓN DE FAQs
    ========================================================================== */
 
 /**
@@ -109,7 +109,7 @@ function closeAllFaqs(questions) {
 }
 
 /* ==========================================================================
-   SECCIÓN 10 — FORMULARIO DE CALIFICACIÓN PROGRESIVO
+   FORMULARIO DE CALIFICACIÓN PROGRESIVO (vive en el HERO, ancla #diagnostico)
    ========================================================================== */
 
 /**
