@@ -1251,6 +1251,18 @@ p {
   object-position: center 20%;
 }
 
+/* Logos de centros médicos: se ven enteros sobre blanco, sin el recorte de retrato.
+   El scale compensa el margen blanco que suelen traer los logos cuadrados. */
+.testimonial-card__avatar--logo {
+  background-color: var(--bg-light);
+}
+
+.testimonial-card__avatar--logo img {
+  object-fit: contain;
+  object-position: center;
+  transform: scale(1.3);
+}
+
 /* Sin min-width: 0 el bloque flex no achica y el nombre desborda en mobile */
 .testimonial-card__id {
   display: flex;
