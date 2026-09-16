@@ -1004,6 +1004,10 @@ p {
   color: var(--text-dark);
 }
 
+.testimonials .section-eyebrow {
+  text-align: center;
+}
+
 .testimonials__title {
   text-align: center;
   color: var(--text-dark);
@@ -1021,27 +1025,34 @@ p {
   color: rgba(15, 23, 42, 0.65);
 }
 
-/* El sprite solo define el símbolo de la estrella: no debe ocupar lugar ni
-   generar scroll horizontal, por eso se saca del flujo con tamaño cero */
-.testimonials__sprite {
-  position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-}
-
-/* Mobile-first: 1 columna; 3 desde desktop, igual que la grilla de Planes */
+/* Mobile-first: 1 columna -> 2 en tablet -> 3 en desktop (3 x 2 con 6 reseñas) */
 .testimonials__grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: 1.25rem;
   margin-top: 2.75rem;
   align-items: stretch;
+}
+
+@media (min-width: 640px) {
+  .testimonials__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Con cantidad impar, la última tarjeta no queda huérfana a media fila */
+  .testimonials__grid > li:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (min-width: 1024px) {
   .testimonials__grid {
     grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .testimonials__grid > li:last-child:nth-child(odd) {
+    grid-column: auto;
   }
 }
 
@@ -1051,39 +1062,68 @@ p {
   height: 100%;
   /* <figure> trae margen propio del user-agent */
   margin: 0;
-  background-color: #f1f5f9;
+  background-color: #f8fafc;
   border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: var(--radius);
-  padding: 1.75rem 1.5rem;
-  transition: transform var(--transition), box-shadow var(--transition);
+  border-radius: calc(var(--radius) + 4px);
+  padding: 1.6rem 1.5rem;
+  transition: transform var(--transition), box-shadow var(--transition),
+              border-color var(--transition);
 }
 
 .testimonial-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+  border-color: rgba(0, 82, 255, 0.2);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
 }
 
-/* Puntuación: el texto accesible lo da el aria-label del contenedor */
-.testimonial-card__rating {
-  display: flex;
-  gap: 0.2rem;
+/* Badge "Cliente NetFlow": sello uniforme con check de verificado */
+.testimonial-card__badge {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  background-color: rgba(0, 82, 255, 0.08);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--primary);
 }
 
-.testimonial-card__star {
-  width: 18px;
-  height: 18px;
-  flex: none;
-  fill: var(--primary);
+.testimonial-card__badge::before {
+  content: "✓";
+  display: grid;
+  place-items: center;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: var(--primary);
+  color: var(--bg-light);
+  font-size: 0.6rem;
+  font-weight: 700;
 }
 
-/* Crece para empujar al autor al pie: las 3 tarjetas alinean su firma */
+/* Comilla decorativa + texto: crece para empujar al autor al pie */
 .testimonial-card__quote {
+  position: relative;
   margin: 1.1rem 0 0;
   flex-grow: 1;
 }
 
+.testimonial-card__quote::before {
+  content: "“";
+  display: block;
+  height: 1.6rem;
+  font-family: var(--font-display);
+  font-size: 3rem;
+  line-height: 1;
+  color: rgba(0, 82, 255, 0.25);
+}
+
 .testimonial-card__quote p {
-  font-size: 1rem;
+  font-size: 0.975rem;
   line-height: 1.65;
   color: rgba(15, 23, 42, 0.8);
   overflow-wrap: break-word;
@@ -1092,24 +1132,49 @@ p {
 .testimonial-card__author {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
-  margin-top: 1.5rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid rgba(15, 23, 42, 0.1);
+  gap: 0.9rem;
+  margin-top: 1.4rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
 }
 
+/* Avatar: el contenedor muestra las iniciales sobre fondo neutro y la foto
+   se apoya encima. Si la foto falla, script.js la retira y queda el fallback. */
 .testimonial-card__avatar {
-  width: 56px;
-  height: 56px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
   flex: none;
+  overflow: hidden;
   border-radius: 50%;
+  border: 2px solid var(--accent);
+  background-color: #e2e8f0;
+}
+
+.testimonial-card__avatar::before {
+  content: attr(data-initials);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: rgba(15, 23, 42, 0.55);
+}
+
+.testimonial-card__avatar img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  /* Fallback: si el avatar remoto no carga, queda un círculo de marca */
-  background-color: var(--primary);
+  /* Las fotos son retratos de medio cuerpo: prioriza la cara */
+  object-position: center 20%;
 }
 
 /* Sin min-width: 0 el bloque flex no achica y el nombre desborda en mobile */
 .testimonial-card__id {
+  display: flex;
+  flex-direction: column;
   min-width: 0;
 }
 
@@ -1123,16 +1188,9 @@ p {
 
 .testimonial-card__role {
   margin-top: 0.15rem;
-  font-size: 0.88rem;
+  font-size: 0.875rem;
   font-weight: 600;
   color: var(--primary);
-  overflow-wrap: break-word;
-}
-
-.testimonial-card__place {
-  margin-top: 0.1rem;
-  font-size: 0.85rem;
-  color: rgba(15, 23, 42, 0.6);
   overflow-wrap: break-word;
 }
 

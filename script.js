@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeaderScrollState();
   initFaqAccordion();
   initQualifyForm();
+  initAvatarFallback();
   initFooterYear();
 });
 
@@ -459,6 +460,31 @@ function isValidEmail(value) {
 function isValidPhone(value) {
   const digits = value.replace(/\D/g, '');
   return digits.length >= 8;
+}
+
+/* ==========================================================================
+   TESTIMONIOS — FALLBACK DE AVATARES
+   ========================================================================== */
+
+/**
+ * Si una foto de testimonio no carga, la retira del DOM para que se vea el
+ * círculo neutro con iniciales (data-initials) en lugar del ícono roto.
+ * El script corre con defer: una imagen puede haber fallado antes, por eso
+ * además del listener se revisan las que ya terminaron sin píxeles.
+ */
+function initAvatarFallback() {
+  const avatars = document.querySelectorAll('.testimonial-card__avatar img');
+
+  avatars.forEach((img) => {
+    const dropImage = () => img.remove();
+
+    if (img.complete && img.naturalWidth === 0) {
+      dropImage();
+      return;
+    }
+
+    img.addEventListener('error', dropImage, { once: true });
+  });
 }
 
 /* ==========================================================================
