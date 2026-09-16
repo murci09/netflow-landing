@@ -1274,44 +1274,6 @@ p {
   overflow-wrap: break-word;
 }
 
-/* --- Tarjetas de especialidad: mismo formato, sin firma ni sello de cliente --- */
-.testimonial-card__badge--neutral {
-  background-color: rgba(15, 23, 42, 0.06);
-  color: rgba(15, 23, 42, 0.7);
-}
-
-.testimonial-card__badge--neutral::before {
-  content: "+";
-  background-color: rgba(15, 23, 42, 0.55);
-  font-size: 0.75rem;
-}
-
-.testimonial-card__heading {
-  margin-top: 1.1rem;
-  font-size: 1.1rem;
-  color: var(--text-dark);
-}
-
-/* Crece igual que la cita, así las firmas alinean al pie en las 6 tarjetas */
-.testimonial-card__text {
-  flex-grow: 1;
-  margin-top: 0.6rem;
-  font-size: 0.975rem;
-  line-height: 1.65;
-  color: rgba(15, 23, 42, 0.8);
-}
-
-.testimonial-card__avatar--icon {
-  border-color: rgba(0, 82, 255, 0.35);
-  background-color: rgba(0, 82, 255, 0.08);
-}
-
-.testimonial-card__avatar--icon svg {
-  width: 1.5rem;
-  height: 1.5rem;
-  fill: var(--primary);
-}
-
 /* ==========================================================================
    13. SECCIÓN 7 — PLANES (3 tarjetas, GOLD destacada)
    ========================================================================== */
